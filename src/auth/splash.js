@@ -1,3 +1,3 @@
 <View>
-    <Text>jjjjjs</Text>
+    <Text>jkkkkkkjs</Text>
 </View>
