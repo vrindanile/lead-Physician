@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, ActivityIndicator, Button, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, StatusBar, } from 'react-native'
+import { Text, View, Image, ActivityIndicator, Button, TouchableOpacity, StyleSheet, Dimensions } from 'react-native'
 import Color, { dimensions } from '../../Global/Color';
-import { useSharedValue, useDerivedValue, withSpring } from 'react-native-reanimated';
-import MyHeader from '../../Components/MyHeader/MyHeader';
 // import Spinner from 'react-native-spinkit';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Circle, Rect } from 'react-native-svg';
@@ -13,12 +11,12 @@ import Svg, { Circle, Rect } from 'react-native-svg';
 // import AsyncSStyleSheettorage from '@react-native-async-storage/async-storage';
 //import { useSelector, useDispatch } from 'react-redux';
 import KeySvg from '../../Global/Images/logo.svg';
-const Home = ({ navigation }) => {
+const Chat = ({ navigation }) => {
     // const dispatch = useDispatch();
     const [animating, setAnimating] = useState(true);
     ;
-    const [scrolling, setscrolling] = useState(false);
-    const scrollY = useSharedValue(0);
+
+
 
     // useEffect(() => {
     //     // getTheme();
@@ -38,22 +36,15 @@ const Home = ({ navigation }) => {
 
     return (
 
-        <SafeAreaView style={{ flex: 1, }}>
-            <StatusBar backgroundColor={Color.LIGHT_BLACK} />
-            <View style={{
-                flex: 1,
-                backgroundColor: Color.SCREEN_BG,
+        <View style={styles.container}>
 
-            }}>
-                <MyHeader
-                    Title="Home"
-                    scrolling={scrolling}
-                    scrollY={scrollY}
-                    style={scrolling ? { zIndex: 99 } : null}
-                    isBorderRadius={true}
-                />
+            <View style={styles.imageContainer}></View>
+            <KeySvg width={dimensions.SCREEN_WIDTH * 0.70} height={dimensions.SCREEN_WIDTH * 0.40} style={{ alignSelf: 'center', }} />
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+
+                <ActivityIndicator size="large" color={Color.PRIMARY} />
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 const styles = StyleSheet.create({
@@ -95,4 +86,4 @@ const styles = StyleSheet.create({
         bottom: 50,
     },
 });
-export default Home;
+export default Chat;

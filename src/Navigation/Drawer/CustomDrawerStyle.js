@@ -1,20 +1,20 @@
 import Color from '../../Global/Color';
 import { StyleSheet } from 'react-native';
-
+import { dimensions } from '../../Global/Color';
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
         // color: Colors.LITE_GREY,
-        backgroundColor: '#313131',
+        backgroundColor: Color.LIGHT_BLACK,
     },
     mainView: {
         paddingTop: 30,
-        paddingLeft: 18,
-        paddingRight: 12,
-        paddingBottom: 30,
+        paddingBottom: 60,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: Color.WHITE,
+        justifyContent: 'center'
     },
     logoCloseView: {
         flexDirection: 'row',
@@ -98,4 +98,11 @@ export const styles = StyleSheet.create({
         color: Color.LIGHT_GRAY,
         padding: 20,
     },
+    overflowView: {
+        backgroundColor: Color.PRIMARY, zIndex: 9, position: 'absolute', height: 91, width: dimensions.SCREEN_WIDTH * 0.65, top: 100, borderRadius: 15, alignSelf: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+
+
+    }
 });

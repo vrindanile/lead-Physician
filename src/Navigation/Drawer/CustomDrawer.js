@@ -13,7 +13,7 @@ import { CommonActions } from '@react-navigation/core';
 import MyText from '../../Components/MyText/MyText';
 // import CustomLoaderLogout from 'components/CustomLoader/CustomLoaderLogout';
 //import : global
-import Color from '../../Global/Color';
+import Color, { dimensions } from '../../Global/Color';
 //import : styles
 import { styles } from './CustomDrawerStyle';
 //import : modal
@@ -25,7 +25,9 @@ import Toast from 'react-native-toast-message';
 // import { logOutUser, setUser } from 'src/reduxToolkit/reducer/user';
 import { useDrawerStatus } from '@react-navigation/drawer';
 // import CustomLoader from '../../components/CustomLoader/CustomLoader';
-
+///svg image
+import Logo from '../../Global/Images/logo.svg'
+import Profile from '../../Global/Images/profile.svg'
 const CustomDrawer = ({ navigation }) => {
     //variables
     // const userToken = useSelector(state => state.user.userToken);
@@ -97,20 +99,39 @@ const CustomDrawer = ({ navigation }) => {
                         style={styles.image}
                         source={require('../../assets/images/logo.png')}
                     /> */}
-                    <TouchableOpacity
+                    <Logo height={56} width={226} ></Logo>
+                    {/* <TouchableOpacity
                         style={styles.crossImage}
-                    // onPress={() => {
-                    //     closeDrawer();
-                    // }}
+                    onPress={() => {
+                        closeDrawer();
+                    }}
                     >
-                        {/* <Image
+                        <Image
                             resizeMode="contain"
                             // style={styles.image}
                             source={require('../../assets/images/close-circle.png')}
-                        /> */}
-                    </TouchableOpacity>
+                        />
+                    </TouchableOpacity> */}
                 </View>
-
+                <View style={styles.overflowView}>
+                    <Profile style={{ marginHorizontal: 15 }}></Profile>
+                    <View style={{ flexDirection: 'column' }}>
+                        <MyText
+                            text={'Follow Us!'}
+                            fontSize={12}
+                            textColor="white"
+                            fontFamily="regular"
+                            style={{}}
+                        />
+                        <MyText
+                            text={'Follow Us!'}
+                            fontSize={12}
+                            textColor="white"
+                            fontFamily="regular"
+                            style={{}}
+                        />
+                    </View>
+                </View>
                 <View style={{ padding: 20, paddingLeft: 28, paddingRight: 24 }}>
                     <DrawerItemList
                         Title="Home"

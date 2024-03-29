@@ -15,7 +15,7 @@ import Home from '../../Screens/Home/Home';
 import Course from '../../Screens/Courses/Course';
 import Schedule from '../../Screens/Schedule/Schedule';
 import Profile from '../../Screens/Profile/Profile';
-
+import Chat from '../../Screens/Chat/Chat';
 ///svg images  29-02-2024
 import ProfileActive from '../../Global/Images/activeUser.svg'
 import ProfileInactive from '../../Global/Images/profileIactive.svg'
@@ -24,6 +24,8 @@ import InactiveSchdule from '../../Global/Images/inactiveschdule.svg'
 import Courses from '../../Global/Images/courses.svg'
 import ChatActive from '../../Global/Images/activeChat.svg'
 import ChatInactive from '../../Global/Images/inactiveChat.svg'
+import ActiveHome from '../../Global/Images/ActiveHome.svg'
+import InactiveHome from '../../Global/Images/inactiveHome.svg'
 
 
 import Toast from 'react-native-toast-message';
@@ -49,16 +51,16 @@ const BottomTab = ({ userToken }) => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={styles.tabStyle}>
-                            {focused ? null : null
-                                //     <Image source={require('assets/images/home-2.png')} />
-                                // ) : (
-                                //     <Image source={require('assets/images/home.png')} />
+                            {focused ? (
+                                <ActiveHome></ActiveHome>
+                            ) : (
+                                <InactiveHome></InactiveHome>)
                             }
                             <MyText
                                 text="Home"
                                 fontSize={14}
                                 fontFamily="medium"
-                                textColor={focused ? Color.THEME_BLUE : Color.LIGHT_GRAY}
+                                textColor={focused ? Color.PRIMARY : Color.LIGHT_BLACK}
                                 marginTop={5}
                             />
                         </View>
@@ -71,38 +73,17 @@ const BottomTab = ({ userToken }) => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={styles.tabStyle}>
-                            {/* {focused ? (
-                                <Image source={require('../../assets/images/heart-yellow-outline.png')} style={{ height: 23, width: 23, resizeMode: 'contain' }} />
-                            ) : (
-                                <Image source={require('../../assets/images/wishlist.png')} />
-                            )} */}
-                            <MyText
-                                text="Wishlist"
-                                fontSize={14}
-                                fontFamily="medium"
-                                textColor={focused ? Color.THEME_BLUE : Color.LIGHT_GRAY}
-                                marginTop={5}
-                            />
-                        </View>
-                    ),
-                }}
-            />
-            {/* <Tab.Screen
-                name={ScreenNames.MY_ORDERS}
-                component={MyOrders}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View style={styles.tabStyle}>
                             {focused ? (
-                                <Image source={require('assets/images/my-orders-2.png')} />
+
+                                <ChatActive></ChatActive>
                             ) : (
-                                <Image source={require('assets/images/my-orders.png')} />
+                                <ChatInactive></ChatInactive>
                             )}
                             <MyText
-                                text="My Orders"
+                                text="Chats"
                                 fontSize={14}
                                 fontFamily="medium"
-                                textColor={focused ? Colors.THEME_BLUE : Colors.LIGHT_GRAY}
+                                textColor={focused ? Color.PRIMARY : Color.LIGHT_BLACK}
                                 marginTop={5}
                             />
                         </View>
@@ -110,27 +91,65 @@ const BottomTab = ({ userToken }) => {
                 }}
             />
             <Tab.Screen
-                name={ScreenNames.PROFILE}
+                name={'Profile'}
                 component={Profile}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <View style={[styles.tabStyle, { backgroundColor: Color.PRIMARY, position: 'absolute', bottom: 34, height: 66, width: 66, borderRadius: 50 }]}>
+                            {focused ? (
+                                <Courses width={24} height={24}></Courses>
+                            ) : (
+                                <Courses width={40} height={40}></Courses>
+                            )}
+
+                        </View>
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name={'Schedule'}
+                component={Schedule}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={styles.tabStyle}>
                             {focused ? (
-                                <Image source={require('assets/images/profile-2.png')} />
+                                <SchduleActive></SchduleActive>
                             ) : (
-                                <Image source={require('assets/images/profile.png')} />
+                                <InactiveSchdule></InactiveSchdule>
                             )}
                             <MyText
-                                text="Profile"
+                                text="Schedule"
                                 fontSize={14}
                                 fontFamily="medium"
-                                textColor={focused ? Colors.THEME_BLUE : Colors.LIGHT_GRAY}
+                                textColor={focused ? Color.PRIMARY : Color.LIGHT_BLACK}
                                 marginTop={5}
                             />
                         </View>
                     ),
                 }}
-            /> */}
+            />
+            <Tab.Screen
+                name={'Chat'}
+                component={Chat}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <View style={styles.tabStyle}>
+                            {focused ? (
+                                <ProfileActive></ProfileActive>
+                            ) : (
+                                <ProfileInactive></ProfileInactive>
+                            )}
+                            <MyText
+                                text="Profile"
+                                fontSize={14}
+                                fontFamily="medium"
+                                textColor={focused ? Color.PRIMARY : Color.LIGHT_BLACK}
+                                marginTop={5}
+                            />
+                        </View>
+                    ),
+                }}
+            />
         </Tab.Navigator>
     );
 };
