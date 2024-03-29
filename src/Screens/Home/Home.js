@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, ActivityIndicator, Button, TouchableOpacity, StyleSheet, Dimensions } from 'react-native'
-import Color, { dimensions } from '../Global/Color'
+import Color, { dimensions } from '../../Global/Color';
 // import Spinner from 'react-native-spinkit';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Circle, Rect } from 'react-native-svg';
@@ -10,38 +10,12 @@ import Svg, { Circle, Rect } from 'react-native-svg';
 //src/reduxToolkit/reducer/user
 // import AsyncSStyleSheettorage from '@react-native-async-storage/async-storage';
 //import { useSelector, useDispatch } from 'react-redux';
-import KeySvg from '../Global/Images/logo.svg';
-const Splash = ({ navigation }) => {
+import KeySvg from '../../Global/Images/logo.svg';
+const Home = ({ navigation }) => {
     // const dispatch = useDispatch();
     const [animating, setAnimating] = useState(true);
     ;
-    useEffect(() => {
-        setTimeout(async () => {
-            // const userInfo = await AsyncStorage.getItem('userInfo');
-            // const userToken = await AsyncStorage.getItem('userToken');
-            // const userData = JSON.parse(userInfo);
 
-            // if (userData) {
-            //     dispatch(setUserToken(userToken));
-            //     dispatch(setUser(userData));
-            //     if (userData != null) {
-            //         navigation.navigate("MainContainer");
-            //     } else {
-            //         navigation.navigate("Register");
-            //     }
-            // } else {
-            //     navigation.navigate("Register");
-            // }
-        }, 2000);
-        // useEffect(() => {
-        // getTheme();
-        setTimeout(() => {
-            setAnimating(false);
-
-
-            navigation.replace('Welcome')
-        }, 5000);
-    }, []);
 
 
     // useEffect(() => {
@@ -112,4 +86,4 @@ const styles = StyleSheet.create({
         bottom: 50,
     },
 });
-export default Splash;
+export default Home;

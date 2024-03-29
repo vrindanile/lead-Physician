@@ -80,7 +80,10 @@ const SignIn = ({ navigation }) => {
 
                         >
                         </CustomTextBox></View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        console.log('did i reach here');
+                        navigation.navigate('BottomTab')
+                    }}>
                         <MyText text='Forgot Password?' fontWeight='normal' fontSize={12} textColor={Color.LIGHT_BLACK} fontFamily='Roboto' style={{ fontWeight: '400', textAlign: 'right', marginVertical: 13 }} />
                     </TouchableOpacity>
 

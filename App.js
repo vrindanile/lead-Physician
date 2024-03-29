@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import Drawer from './src/Navigation/Drawer/Drawer';
 import AuthStack from './src/Navigation/AuthStack';
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 
@@ -54,9 +54,11 @@ const App = () => {
     // <Splash></Splash> <Provider store={store}>
     // <Provider store={store}>
     <NavigationContainer>
-      <AuthStack />
+      <Drawer />
+      {/* <SafeAreaView style={{flex: 1}}>
+          <StatusBar backgroundColor={Colors.THEME_BROWN} />
+        </SafeAreaView> */}
       <Toast config={toastConfig} />
-      {/* <MainContainer /> */}
     </NavigationContainer>
     // </Provider>
 

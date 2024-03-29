@@ -15,6 +15,7 @@ import Splash from '../Screens/splash';
 import Welcome from '../Screens/Auth/Welcome';
 import Signup from '../Screens/Auth/Signup';
 import SignIn from '../Screens/Auth/Signin';
+import BottomTab from './BottomTab/BottomTab';
 const Stack = createNativeStackNavigator();
 const AuthStack = () => {
     return (
@@ -25,7 +26,7 @@ const AuthStack = () => {
             <Stack.Screen name="Welcome" component={Welcome} />
             <Stack.Screen name="Signup" component={Signup} />
             <Stack.Screen name="SignIn" component={SignIn} />
-
+            <Stack.Screen name="BottomTab" component={BottomTab} />
         </Stack.Navigator>
     );
 };
