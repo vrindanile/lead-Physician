@@ -17,6 +17,7 @@ import Signup from '../Screens/Auth/Signup';
 import SignIn from '../Screens/Auth/Signin';
 import BottomTab from './BottomTab/BottomTab';
 import CourseDetail from '../Screens/CourseDetail/CourseDetail';
+import ModuleScreen from '../Screens/Module/ModuleScreen';
 const Stack = createNativeStackNavigator();
 const AuthStack = () => {
     return (
@@ -30,6 +31,7 @@ const AuthStack = () => {
 
             <Stack.Screen name="BottomTab" component={BottomTab} />
             <Stack.Screen name="CourseDetail" component={CourseDetail} />
+            <Stack.Screen name="ModuleScreen" component={ModuleScreen} />
 
 
         </Stack.Navigator>

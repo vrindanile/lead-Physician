@@ -70,52 +70,54 @@ import Laptop from '../../Global/Images/laptop.svg'
 import Profile from '../../Global/Images/profileCircle.svg'
 import Calendar from '../../Global/Images/calendar.svg'
 import Chapter from '../../Global/Images/savedBook.svg'
+import Module from '../../Global/Images/moduleImg.svg'
+import Arrow from '../../Global/Images/arrowRight.svg'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
-const data = [
-    {
-        id: 1,
-        title: 'New Methods to try',
-        description:
-            'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
-        time: '15:00',
-    },
-    {
-        id: 3,
-        title: 'How to use coding ',
-        description:
-            'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
-        time: '15:00',
-    },
-    {
-        id: 4,
-        title: 'What is coding about',
-        description:
-            'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
-        time: '15:00',
-    },
-    {
-        id: 5,
-        title: 'How to create animations',
-        description:
-            'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
-        time: '15:00',
-    },
-    {
-        id: 6,
-        title: 'Possible to create layout animations?',
-        description:
-            'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
-        time: '15:00',
-    },
-    {
-        id: 7,
-        title: 'How to Create Swipe Buttons',
-        description:
-            'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
-        time: '15:00',
-    },
-];
+// const data = [
+//     {
+//         id: 1,
+//         title: 'New Methods to try',
+//         description:
+//             'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
+//         time: '15:00',
+//     },
+//     {
+//         id: 3,
+//         title: 'How to use coding ',
+//         description:
+//             'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
+//         time: '15:00',
+//     },
+//     {
+//         id: 4,
+//         title: 'What is coding about',
+//         description:
+//             'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
+//         time: '15:00',
+//     },
+//     {
+//         id: 5,
+//         title: 'How to create animations',
+//         description:
+//             'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
+//         time: '15:00',
+//     },
+//     {
+//         id: 6,
+//         title: 'Possible to create layout animations?',
+//         description:
+//             'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
+//         time: '15:00',
+//     },
+//     {
+//         id: 7,
+//         title: 'How to Create Swipe Buttons',
+//         description:
+//             'How to create animated swipe button from react native? Here we use react native reanimated v2 for creating this swipe button. React native animations are something that was complicated for me at the beginning.',
+//         time: '15:00',
+//     },
+// ];
 const reviewsData = [
     {
         id: '1',
@@ -136,7 +138,21 @@ const tags = [
     { name: 'Tatoos 2023', id: '3' },
     { name: 'Body Piercing', id: '4' },
 ];
+const data = [{
+    id: '1',
+    title: 'Module 01',
 
+},
+{
+    id: '2',
+    title: 'Module 02 Improving Self-Image and Confidence',
+
+},
+{
+    id: '3',
+    title: 'Module 3 Goal Setting & Achieving'
+},
+]
 const addToCartObject = {};
 const CourseDetail = ({ navigation, dispatch, route }) => {
     // const defaultImgPath = Image.resolveAssetSource(defaultImg).uri;
@@ -188,19 +204,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
         });
     }, []);
 
-    const data = [{
-        id: '1',
-        title: 'Module 01'
-    },
-    {
-        id: '2',
-        title: 'Module 02'
-    },
-    {
-        id: '3',
-        title: 'Module 03'
-    },
-    ]
+
     // const getProductDetails = async () => {
     //     const postData = new FormData();
     //     postData.append('type', route?.params?.type);
@@ -311,9 +315,32 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
 
     const RenderItemLead = ({ item }) => {
         return (
-            <View style={styles.moduleView}>
-
-            </View>
+            <TouchableOpacity style={styles.moduleView} onPress={() => { navigation.navigate('ModuleScreen') }}>
+                <Module></Module>
+                <View>
+                    <MyText
+                        text={item?.title}
+                        fontFamily="Roboto"
+                        fontWeight='bold'
+                        fontSize={14}
+                        textColor={Color.LIGHT_BLACK}
+                        style={{ width: dimensions.SCREEN_WIDTH * 0.52 }}
+                    />
+                    <MyText
+                        text={'2/4'}
+                        fontFamily="Roboto"
+                        fontWeight='500'
+                        fontSize={18}
+                        textColor={Color.PRIMARY}
+                    />
+                </View>
+                <TouchableOpacity style={{
+                    width: 44, height: 44,
+                    borderRadius: 5, backgroundColor: Color.PRIMARY, justifyContent: 'center', alignItems: 'center', marginTop: 6
+                }}>
+                    <Arrow></Arrow>
+                </TouchableOpacity>
+            </TouchableOpacity>
         )
     }
     // const renderTags = ({ item }) => {
@@ -641,7 +668,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                         // source={require('assets/images/rectangle-1035.png')}
                         style={styles.crseImg}
                         imageStyle={{ borderRadius: 10 }}> */}
-                    <View style={{ width: dimensions.SCREEN_WIDTH * 0.90, height: 'auto', marginBottom: 20, backgroundColor: 'white', marginTop: 20, borderRadius: 10 }}>
+                    <View style={{ width: dimensions.SCREEN_WIDTH * 0.90, height: 'auto', backgroundColor: 'white', marginTop: 20, borderRadius: 10 }}>
                         <ImageBackground
                             // source={{ uri: productDetails?.thumb?.path }}
                             source={require('../../Global/Images/images.png')}
@@ -675,7 +702,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                             </View>
                         </View>
                         <MyText text={'This module will give you a sense of what is going to happen. An intro to how this all started. An idea of what you can become if you hold a growth mindset.'} fontWeight='400' fontSize={14} textColor={'#66757F'} fontFamily='Roboto' style={{ alignSelf: 'center', marginHorizontal: 14, lineHeight: 24 }} />
-                        <View style={{ backgroundColor: '#F3F8E1', height: 'auto', width: dimensions.SCREEN_WIDTH * 0.90, paddingVertical: 12, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, }}>
+                        <View style={{ backgroundColor: '#F3F8E1', height: 'auto', width: dimensions.SCREEN_WIDTH * 0.90, paddingVertical: 12, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, marginTop: 7 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.85, marginHorizontal: 9, }}>
                                 <View style={{ flexDirection: 'row', }}>
                                     <Profile ></Profile>
