@@ -314,8 +314,9 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
     };
 
     const RenderItemLead = ({ item }) => {
+        console.log('muuuu item--->>', item)
         return (
-            <TouchableOpacity style={styles.moduleView} onPress={() => { navigation.navigate('ModuleScreen') }}>
+            <TouchableOpacity style={styles.moduleView} onPress={() => { item.id === '1' ? navigation.navigate('ModuleScreen') : navigation.navigate('Summary') }}>
                 <Module></Module>
                 <View>
                     <MyText
