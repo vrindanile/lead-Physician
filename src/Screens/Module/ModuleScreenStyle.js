@@ -157,5 +157,15 @@ export const styles = StyleSheet.create({
         width: dimensions.SCREEN_WIDTH * 0.89,
         backgroundColor: Color.WHITE,
         height: 'auto', padding: 10, borderRadius: 5
+    },
+    buttonRow: { flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.90, marginBottom: 10 },
+    buttonClick: {
+        width: dimensions.SCREEN_WIDTH * 0.43,
+        height: 50,
+        borderRadius: 10, backgroundColor: Color.PRIMARY,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row'
     }
 });
+

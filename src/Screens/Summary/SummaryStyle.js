@@ -6,7 +6,7 @@ import { responsiveHeight } from 'react-native-responsive-dimensions';
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Color.SCREEN_BG,
+        backgroundColor: '#F7FAEB',
     },
     mainView: {
         padding: 20,

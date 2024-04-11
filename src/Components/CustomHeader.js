@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, TextInput, Keyboard, StyleSheet, S
 import Color, { dimensions } from '../Global/Color'
 import LeftArrow from '../Global/Images/arrowLeft.svg'
 import MyText from './MyText/MyText'
-const CustomHeader = ({ navigation, text }) => {
+const CustomHeader = ({ navigation, text, type }) => {
     console.log('my text coponent--->>', text);
     return (
 
@@ -30,7 +30,7 @@ const CustomHeader = ({ navigation, text }) => {
 const styles = StyleSheet.create({
     customView: {
         backgroundColor: Color.LIGHT_BLACK,
-        height: dimensions.SCREEN_HEIGHT * 0.30,
+        height: dimensions.SCREEN_HEIGHT * 0.20,
         flexDirection: 'row',
         // Center items vertically
         // Center items horizontally

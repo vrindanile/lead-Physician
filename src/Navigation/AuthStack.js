@@ -19,6 +19,10 @@ import BottomTab from './BottomTab/BottomTab';
 import CourseDetail from '../Screens/CourseDetail/CourseDetail';
 import ModuleScreen from '../Screens/Module/ModuleScreen';
 import Summary from '../Screens/Summary/Summary';
+import Favorites from '../Screens/Favorites/Favorites';
+import Subscription from '../Screens/Subscription/Subscription';
+import Saved from '../Screens/Saved/Saved';
+import SubscriptionCard from '../Screens/SubscriptionCard/SubscriptionCard';
 const Stack = createNativeStackNavigator();
 const AuthStack = () => {
     return (
@@ -34,6 +38,10 @@ const AuthStack = () => {
             <Stack.Screen name="CourseDetail" component={CourseDetail} />
             <Stack.Screen name="ModuleScreen" component={ModuleScreen} />
             <Stack.Screen name="Summary" component={Summary} />
+            <Stack.Screen name="Favorites" component={Favorites} />
+            <Stack.Screen name="Saved" component={Saved} />
+            <Stack.Screen name="Subscription" component={Subscription} />
+            <Stack.Screen name="SubscriptionCard" component={SubscriptionCard} />
 
 
         </Stack.Navigator>

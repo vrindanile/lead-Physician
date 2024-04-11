@@ -30,6 +30,7 @@ import Pending from '../../Global/Images/timer.svg'
 import SavedBook from '../../Global/Images/savedBook.svg'
 import OnGoing from '../../Global/Images/clock.svg'
 import Zoom from '../../Global/Images/Zoom.svg'
+import Calendar from '../../Global/Images/calendarWhite.svg'
 // const axios = require('axios');
 const Schedule = (props) => {
     const [DATA2, setDATA2] = useState(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
@@ -49,8 +50,8 @@ const Schedule = (props) => {
     const [apiDate, setapiDate] = useState('2024-01-01')
     const [events, setEvents] = useState([
         {
-            start: '2024-04-05 02:00:00', // yyyy/mm/dd
-            end: '2024-04-05 04:00:00',
+            start: '2024-04-10 02:00:00', // yyyy/mm/dd
+            end: '2024-04-10 04:00:00',
             title: 'New Year Party',
             summary: 'xyz Location',
             name: 'ashish',
@@ -220,13 +221,14 @@ const Schedule = (props) => {
                         {/* <Image source={require('../../assets/images/Icons/calendra.png')} style={{ height: 25, width: 25, resizeMode: 'stretch', alignSelf: 'center' }}></Image> */}
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={{ width: 60, height: 50, backgroundColor: Color.Primary_Green, justifyContent: 'center', borderRadius: 10, marginTop: 15 }}
+                <TouchableOpacity style={{ width: 60, height: 50, backgroundColor: Color.PRIMARY, justifyContent: 'center', borderRadius: 10, marginTop: 15 }}
                     onPress={() => {
                         getHome(new Date(), 'date')
                         //setclick1(DATA2[0])
                         // setdisplaydate('Choose Date')
                     }}>
-                    <Text style={{ color: '#fff', fontSize: 13, textAlign: 'center', fontWeight: '700' }}>Clear</Text>
+                    {/* <Text style={{ color: '#fff', fontSize: 13, textAlign: 'center', fontWeight: '700' }}>Clear</Text> */}
+                    <Calendar style={{ alignSelf: 'center' }}></Calendar>
                 </TouchableOpacity>
             </View>
 

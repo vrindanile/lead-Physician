@@ -73,6 +73,9 @@ import Chapter from '../../Global/Images/savedBook.svg'
 import Module from '../../Global/Images/moduleImg.svg'
 import Arrow from '../../Global/Images/arrowRight.svg'
 import Tick from '../../Global/Images/tickCircleVide.svg'
+import Saved from '../../Global/Images/frame.svg'
+import Like from '../../Global/Images/like.svg'
+
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
 // const data = [
@@ -704,6 +707,31 @@ const ModuleScreen = ({ navigation, dispatch, route }) => {
                             style={{ marginHorizontal: 12 }}
                         />
                     </TouchableOpacity>
+                    <View style={styles.buttonRow}>
+                        <TouchableOpacity style={styles.buttonClick} onPress={() => { navigation.navigate("Favorites") }}>
+                            <Like></Like>
+                            <MyText
+                                text={'Save to My Favorites'}
+                                fontWeight='500'
+                                fontFamily="Roboto"
+                                fontSize={14}
+                                textColor={Color.WHITE}
+                                style={{ marginHorizontal: 3 }}
+                            />
+
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.buttonClick, { backgroundColor: Color.LIGHT_BLACK }]} onPress={() => { navigation.navigate('Saved') }}>
+                            <Saved></Saved>
+                            <MyText
+                                text={'Save for Later'}
+                                fontWeight='500'
+                                fontFamily="Roboto"
+                                fontSize={14}
+                                textColor={Color.WHITE}
+                                style={{ marginHorizontal: 3 }}
+                            />
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.ViewDescription}>
                         <View style={{ flexDirection: 'row', marginVertical: 12, marginHorizontal: 5 }}>
                             <Laptop style={{ marginTop: 10 }}></Laptop>

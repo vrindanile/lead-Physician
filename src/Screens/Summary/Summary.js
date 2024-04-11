@@ -270,7 +270,7 @@ const Summary = ({ navigation, dispatch, route }) => {
                     onScroll={handleScroll}
                     scrollEventThrottle={16}
                     style={styles.mainView}>
-                    <View style={{ width: dimensions.SCREEN_WIDTH * 0.90, height: 372, backgroundColor: Color.PRIMARY, marginTop: 20, borderRadius: 10 }}>
+                    <View style={{ width: dimensions.SCREEN_WIDTH * 0.90, height: 'auto', backgroundColor: Color.PRIMARY, marginTop: 20, borderRadius: 30 }}>
                         <ProfileImg style={{ alignSelf: 'center', marginVertical: 12 }}></ProfileImg>
                         <MyText text={'Katty parrie'} fontWeight='500' fontSize={14} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center', }} />
                         <ImageBackground source={require('../../Global/Images/progress.png')}
@@ -287,7 +287,7 @@ const Summary = ({ navigation, dispatch, route }) => {
                             <MyText text={'OVERALL SCORE'} fontWeight='500' fontSize={14} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center', }} />
                         </ImageBackground>
                         <MyText text={'Congratulations!'} fontWeight='500' fontSize={24} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center', }} />
-                        <MyText text={'Worksheet Passed!'} fontWeight='400' fontSize={18} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center', }} />
+                        <MyText text={'Worksheet Passed!'} fontWeight='400' fontSize={18} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center', marginBottom: 20 }} />
                     </View>
 
                     <MyText text={'USED 00:30:00'} fontWeight='500' fontSize={12} textColor={'#6A6A6A'} fontFamily='Roboto' style={{ alignSelf: 'center', marginVertical: 12, }} />
@@ -336,10 +336,10 @@ const Summary = ({ navigation, dispatch, route }) => {
                         <Arrow></Arrow>
                         <MyText text={'RETURN TO COURSE'} fontWeight='500' fontSize={14} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center', marginVertical: 12, marginLeft: 12 }} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.buttonBack, { backgroundColor: Color.LIGHT_BLACK }]}>
+                    {/* <TouchableOpacity style={[styles.buttonBack, { backgroundColor: Color.LIGHT_BLACK }]}>
                         <Downlad></Downlad>
-                        <MyText text={'Download'} fontWeight='500' fontSize={14} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center', marginVertical: 12, marginLeft: 12 }} />
-                    </TouchableOpacity>
+                        <MyText text={'Download'} fontWeight='500' fontSize={14} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center', marginLeft: 12 }} />
+                    </TouchableOpacity> */}
                 </ScrollView>
 
             </View >

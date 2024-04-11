@@ -98,9 +98,9 @@ const Signup = ({ navigation }) => {
                         >
                         </CustomTextBox></View>
                     <TouchableOpacity onPress={() => {
+                        navigation.navigate('Subscription')
 
-
-                        signupPressed()
+                        // signupPressed()
                     }} style={{ marginTop: 20 }}>
                         <CustomButtonBlue name="Sign Up"></CustomButtonBlue>
                     </TouchableOpacity>
