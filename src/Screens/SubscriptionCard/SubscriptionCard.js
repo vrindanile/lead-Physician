@@ -130,7 +130,9 @@ const SubscriptionCard = ({ navigation }) => {
                         </View>
                     </View>
 
-
+                    <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH * 0.90, height: 50, backgroundColor: Color.PRIMARY, alignSelf: 'center', borderRadius: 6, marginVertical: 60, justifyContent: 'center' }}>
+                        <Text style={{ alignSelf: 'center', fontSize: 14, color: Color.WHITE }}>Pay</Text>
+                    </TouchableOpacity>
 
 
                 </View>

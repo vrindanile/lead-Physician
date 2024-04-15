@@ -68,8 +68,8 @@ const BottomTab = ({ userToken }) => {
                 }}
             />
             <Tab.Screen
-                name={'Course'}
-                component={Course}
+                name={'Chat'}
+                component={Chat}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={styles.tabStyle}>
@@ -129,8 +129,8 @@ const BottomTab = ({ userToken }) => {
                 }}
             />
             <Tab.Screen
-                name={'Chat'}
-                component={Chat}
+                name={'Course'}
+                component={Course}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={styles.tabStyle}>
