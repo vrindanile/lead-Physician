@@ -21,10 +21,11 @@ import EmailSvg from '../../Global/Images/sms.svg';
 import eye from '../../Global/Images/eye.svg';
 import Call from '../../Global/Images/call.svg'
 import CustomHeader from '../../Components/CustomHeader';
+import MyHeader from '../../Components/MyHeader/MyHeader';
 import Google from '../../Global/Images/googleIcon.svg';
 import Facebook from '../../Global/Images/facebookLogo.svg'
 
-const Signup = ({ navigation }) => {
+const EditProfile = ({ navigation }) => {
     const H = Dimensions.get('screen').height;
     const W = Dimensions.get('screen').width;
     const dispatch = useDispatch();
@@ -82,15 +83,15 @@ const Signup = ({ navigation }) => {
         };
         launchCamera(options, response => {
             if (response.didCancel) {
-                Toast.show({ text1: 'User cancelled picking image' });
+                // Toast.show({ text1: 'User cancelled picking image' });
                 setShowImageSourceModal(false);
                 return;
             } else if (response.errorCode == 'camera_unavailable') {
-                Toast.show({ text1: 'Camera not available on device' });
+                // Toast.show({ text1: 'Camera not available on device' });
                 setShowImageSourceModal(false);
                 return;
             } else if (response.errorCode == 'permission') {
-                Toast.show({ text1: 'Permission not satisfied' });
+                // Toast.show({ text1: 'Permission not satisfied' });
                 setShowImageSourceModal(false);
                 return;
             } else if (response.errorCode == 'others') {
@@ -149,17 +150,17 @@ const Signup = ({ navigation }) => {
             if (response.didCancel) {
                 // Alert.alert('User cancelled camera picker');
                 setShowImageSourceModal(false);
-                Toast.show({ text1: 'User cancelled image picker' });
+                // Toast.show({ text1: 'User cancelled image picker' });
                 // Alert.alert('User cancelled image picker');
                 return;
             } else if (response.errorCode == 'camera_unavailable') {
                 setShowImageSourceModal(false);
-                Toast.show({ text1: 'Camera not available on device' });
+                // Toast.show({ text1: 'Camera not available on device' });
                 // Alert.alert('Camera not available on device');
                 return;
             } else if (response.errorCode == 'permission') {
                 setShowImageSourceModal(false);
-                Toast.show({ text1: 'Permission not satisfied' });
+                // Toast.show({ text1: 'Permission not satisfied' });
                 // Alert.alert('Permission not satisfied');
                 return;
             } else if (response.errorCode == 'others') {
@@ -227,30 +228,31 @@ const Signup = ({ navigation }) => {
                 contentContainerStyle={{ flexGrow: 1 }}
                 keyboardShouldPersistTaps="handled"
             >
-                <ImageBackground source={require('../../Global/Images/BackgroundAuth.png')} style={styles.backgroundImg}>
-                    <CustomHeader navigation={navigation} text="Sign Up" />
-                    <TouchableOpacity
-                        style={{
-                            alignItems: 'center',
-                            marginTop: 78
-                        }}
-                        onPress={() => {
-                            setShowImageSourceModal(true);
-                        }}
-                    >
-                        {filePath == '' ? (
-                            <Image source={require('../../Global/Images/userDefault.png')} style={{ height: 150, width: 150, borderRadius: 100 }} />
-                        ) : (
-                            <Image
-                                resizeMode="cover"
-                                borderRadius={1000}
-                                source={{ uri: filePath.uri }}
-                                style={{ height: 150, width: 150, borderRadius: 100 }}
-                            />
-                        )}
-                        <Image source={require('../../Global/Images/camera.png')} style={{ height: 20, width: 20, position: 'absolute', bottom: 12, right: 130 }} />
-                    </TouchableOpacity>
-                </ImageBackground>
+                <MyHeader
+                    Title={`Edit Profile`}
+                    isBackButton
+                />
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        marginTop: 40
+                    }}
+                    onPress={() => {
+                        setShowImageSourceModal(true);
+                    }}
+                >
+                    {filePath == '' ? (
+                        <Image source={require('../../Global/Images/userDefault.png')} style={{ height: 150, width: 150, borderRadius: 100 }} />
+                    ) : (
+                        <Image
+                            resizeMode="cover"
+                            borderRadius={1000}
+                            source={{ uri: filePath.uri }}
+                            style={{ height: 150, width: 150, borderRadius: 100 }}
+                        />
+                    )}
+                    <Image source={require('../../Global/Images/camera.png')} style={{ height: 20, width: 20, position: 'absolute', bottom: 12, right: 130 }} />
+                </TouchableOpacity>
 
                 <View style={{
                     backgroundColor: 'white', width: '90%',
@@ -322,39 +324,14 @@ const Signup = ({ navigation }) => {
                         >
                         </CustomTextBox></View>
                     <TouchableOpacity onPress={() => {
-                        // navigation.navigate('Subscription')
+                        navigation.goBack('')
 
-                        signUpUser()
+                        // signUpUser()
                     }} style={{ marginTop: 20 }}>
-                        <CustomButtonBlue name="Sign Up"></CustomButtonBlue>
+                        <CustomButtonBlue name="Save"></CustomButtonBlue>
                     </TouchableOpacity>
-                    <View style={{ alignSelf: 'center', marginTop: 10, flexDirection: 'row' }}>
-                        <Text style={styles.myText}>Already have an account?
-                        </Text>
-                        <TouchableOpacity style={{ marginLeft: 3 }} onPress={() => { navigation.navigate('SignIn') }}>
-                            <Text style={styles.textunderline}>Sign In</Text>
-                        </TouchableOpacity>
-                    </View>
 
-                    <View style={{ flexDirection: 'row', marginTop: 16, alignSelf: 'center' }}>
-                        <View style={styles.line}>
-                        </View>
-                        <Text style={styles.txt}>OR</Text>
-                        <View style={styles.line}>
-                        </View>
 
-                    </View>
-                    <View style={{ marginBottom: 90, alignSelf: 'center', marginTop: 30, width: dimensions.SCREEN_WIDTH * 0.80 }}>
-                        <View style={styles.socialView}>
-                            <Google> </Google>
-                            <Text style={styles.socialTxt}>Signup With Google</Text>
-                        </View>
-                        <View style={[styles.socialView, { marginTop: 12 }]}>
-                            <Facebook> </Facebook>
-                            <Text style={styles.socialTxt}>Signup With Google</Text>
-                        </View>
-
-                    </View>
                 </View>
 
                 {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
@@ -457,4 +434,4 @@ const styles = StyleSheet.create({
     },
     backgroundImg: { height: 333, width: dimensions.SCREEN_WIDTH, }
 });
-export default Signup;
+export default EditProfile;

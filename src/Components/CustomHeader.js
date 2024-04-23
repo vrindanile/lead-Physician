@@ -29,8 +29,8 @@ const CustomHeader = ({ navigation, text, type }) => {
 
 const styles = StyleSheet.create({
     customView: {
-        backgroundColor: Color.LIGHT_BLACK,
-        height: dimensions.SCREEN_HEIGHT * 0.20,
+
+
         flexDirection: 'row',
         // Center items vertically
         // Center items horizontally

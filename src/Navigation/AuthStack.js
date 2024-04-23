@@ -23,6 +23,10 @@ import Favorites from '../Screens/Favorites/Favorites';
 import Subscription from '../Screens/Subscription/Subscription';
 import Saved from '../Screens/Saved/Saved';
 import SubscriptionCard from '../Screens/SubscriptionCard/SubscriptionCard';
+import Message from '../Screens/Messages/Message';
+import EditProfile from '../Screens/EditProfile/EditProfile';
+import ChangePassword from '../Screens/ChangePassword/ChangePassword';
+import Notification from '../Notification/Notification';
 const Stack = createNativeStackNavigator();
 const AuthStack = () => {
     return (
@@ -42,7 +46,10 @@ const AuthStack = () => {
             <Stack.Screen name="Saved" component={Saved} />
             <Stack.Screen name="Subscription" component={Subscription} />
             <Stack.Screen name="SubscriptionCard" component={SubscriptionCard} />
-
+            <Stack.Screen name="Message" component={Message} />
+            <Stack.Screen name="EditProfile" component={EditProfile} />
+            <Stack.Screen name="ChangePassword" component={ChangePassword} />
+            <Stack.Screen name="Notification" component={Notification} />
 
         </Stack.Navigator>
     );

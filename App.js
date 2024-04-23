@@ -16,7 +16,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Drawer from './src/Navigation/Drawer/Drawer';
 import AuthStack from './src/Navigation/AuthStack';
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
-
+import { Provider } from 'react-redux';
+import { store } from './src/reduxToolkit/store/store';
 const App = () => {
   LogBox.ignoreAllLogs()
   const toastConfig = {
@@ -52,15 +53,15 @@ const App = () => {
   //const Stack = createNativeStackNavigator();
   return (
     // <Splash></Splash> <Provider store={store}>
-    // <Provider store={store}>
-    <NavigationContainer>
-      <Drawer />
-      {/* <SafeAreaView style={{flex: 1}}>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Drawer />
+        {/* <SafeAreaView style={{flex: 1}}>
           <StatusBar backgroundColor={Colors.THEME_BROWN} />
         </SafeAreaView> */}
-      <Toast config={toastConfig} />
-    </NavigationContainer>
-    // </Provider>
+        <Toast config={toastConfig} />
+      </NavigationContainer>
+    </Provider>
 
   );
 };

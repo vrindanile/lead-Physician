@@ -129,8 +129,8 @@ const BottomTab = ({ userToken }) => {
                 }}
             />
             <Tab.Screen
-                name={'Course'}
-                component={Course}
+                name={'Profile'}
+                component={Profile}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={styles.tabStyle}>

@@ -155,7 +155,7 @@ const MyHeader = ({
                     <MyText
                         text={Title}
                         fontFamily="regular"
-                        fontSize={20}
+                        fontSize={16}
                         marginHorizontal={10}
                         textColor="white"
                         letterSpacing={-0.2}
@@ -198,10 +198,10 @@ const MyHeader = ({
 
                 }}>
                 {IsCartIcon ? (
-                    <TouchableOpacity onPress=
+                    <TouchableOpacity onPress={() => { }}
 
                         // {gotoCart}
-                        {''}
+
                         style={{ marginRight: 10 }}
                     >
                         {/* {cartCount != 0 ? (
@@ -216,7 +216,7 @@ const MyHeader = ({
                 {IsNotificationIcon ? (
                     <TouchableOpacity
                         // onPress={gotoNotification}
-                        onPress={{}}
+                        onPress={() => { navigation.navigate('Notification') }}
                     >
                         {/* {userNotifications ? (
                             <View style={styles.numNotiView}
