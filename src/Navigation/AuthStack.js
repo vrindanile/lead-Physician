@@ -27,6 +27,7 @@ import Message from '../Screens/Messages/Message';
 import EditProfile from '../Screens/EditProfile/EditProfile';
 import ChangePassword from '../Screens/ChangePassword/ChangePassword';
 import Notification from '../Notification/Notification';
+import SetGoal from '../Screens/SetGoal/SetGoal';
 const Stack = createNativeStackNavigator();
 const AuthStack = () => {
     return (
@@ -50,6 +51,7 @@ const AuthStack = () => {
             <Stack.Screen name="EditProfile" component={EditProfile} />
             <Stack.Screen name="ChangePassword" component={ChangePassword} />
             <Stack.Screen name="Notification" component={Notification} />
+            <Stack.Screen name="SetGoal" component={SetGoal} />
 
         </Stack.Navigator>
     );

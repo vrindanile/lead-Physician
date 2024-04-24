@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, ActivityIndicator, Button, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, StatusBar, ScrollView, RefreshControl, ImageBackground, FlatList } from 'react-native'
+import { Text, View, Image, ActivityIndicator, Button, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, StatusBar, ScrollView, RefreshControl, ImageBackground, FlatList, } from 'react-native'
 import Color, { dimensions } from '../../Global/Color';
 import MyText from '../../Components/MyText/MyText';
 import { useSharedValue, useDerivedValue, withSpring } from 'react-native-reanimated';
@@ -20,12 +20,7 @@ import Module from '../../Global/Images/moduleImg.svg'
 import Savedbook from '../../Global/Images/savedBook.svg'
 import VideoChat from '../../Global/Images/videoChat.svg'
 import Zoom from '../../Global/Images/Zoom.svg'
-// import SvgUri from 'react-native-svg-uri';
-// import { useDispatch } from 'react-redux';
-// import { setUser, setUserToken, } from '../../../src/reduxToolkit/reducer/user';
-//src/reduxToolkit/reducer/user
-// import AsyncSStyleSheettorage from '@react-native-async-storage/async-storage';
-//import { useSelector, useDispatch } from 'react-redux';
+import Modal from 'react-native-modal';
 import KeySvg from '../../Global/Images/logo.svg';
 const Home = ({ navigation }) => {
     // const dispatch = useDispatch();
@@ -34,6 +29,7 @@ const Home = ({ navigation }) => {
     const [scrolling, setscrolling] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
+    const [editModal, setEditModal] = useState(false)
     const scrollY = useSharedValue(0);
     const renderNextButton = () => null;
     const renderDoneButton = () => null;
@@ -108,7 +104,7 @@ const Home = ({ navigation }) => {
                                 <View style={{ flexDirection: 'column', width: dimensions.SCREEN_WIDTH * 0.50 }}>
                                     <MyText text={item.text} fontWeight='700' fontSize={16} textColor={Color.WHITE} fontFamily='Roboto' />
                                     <MyText text={item.title} fontWeight='300' fontSize={12} textColor={Color.WHITE} fontFamily='Roboto' style={{ marginTop: 8, lineHeight: 24 }} />
-                                    <TouchableOpacity style={{ height: 36, width: 99, borderRadius: 5, backgroundColor: 'white', marginTop: 8 }}>
+                                    <TouchableOpacity style={{ height: 36, width: 99, borderRadius: 5, backgroundColor: 'white', marginTop: 8 }} onPress={() => { setEditModal(true) }}>
                                         <MyText text={'Read More'} fontWeight='500' fontSize={12} textColor={Color.LIGHT_BLACK} fontFamily='Roboto' style={{ marginTop: 8, alignSelf: 'center' }} />
                                     </TouchableOpacity>
                                 </View>
@@ -316,12 +312,16 @@ const Home = ({ navigation }) => {
                             <MyText text={'Resume'} fontWeight='500' fontSize={14} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center' }} />
                         </TouchableOpacity>
                     </View>
+                    <TouchableOpacity style={styles.goalBar} onPress={() => { navigation.navigate('SetGoal') }}>
+
+                    </TouchableOpacity>
                     <Calendar
                         style={{
                             borderWidth: 1,
                             borderColor: 'gray',
                             height: 350,
                         }}
+                        markingType="custom"
                         theme={{
                             backgroundColor: '#ffffff',
                             calendarBackground: '#ffffff',
@@ -337,11 +337,20 @@ const Home = ({ navigation }) => {
                             [selectedDate]: {
                                 selected: true,
                                 disableTouchEvent: true,
+                                customStyles: {
+                                    container: {
+                                        backgroundColor: Color.PRIMARY,
+                                        borderRadius: 6, // Adjust the border radius for a square shape
+                                        cursor: 'pointer', // Change cursor shape to pointer
+                                    },
+                                    text: {
+                                        color: 'white',
+                                    },
+                                },
                             },
-
                         }}
                     />
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
                         <View style={{ flexDirection: 'column' }}>
                             <MyText
                                 text={'Schedule'}
@@ -417,7 +426,48 @@ const Home = ({ navigation }) => {
                     </View>
                 </ScrollView>
 
+                <Modal
+                    isVisible={editModal}
+                    swipeDirection="down"
 
+
+                    onBackdropPress={() => setEditModal(false)}
+                    onSwipeComplete={e => {
+                        setEditModal(false);
+                    }}
+
+                    scrollTo={() => { }}
+                    scrollOffset={1}
+                    propagateSwipe={true}
+                    coverScreen={false}
+                    backdropColor="transparent"
+                    style={{
+                        justifyContent: 'flex-end',
+                        margin: 0,
+                        backgroundColor: 'rgba(211, 211, 211, 0.7)',
+                    }}>
+
+                    <View
+                        style={{
+                            height: '65%',
+                            backgroundColor: '#FFF',
+                            borderTopLeftRadius: 30,
+                            borderTopRightRadius: 30,
+                            paddingVertical: 20,
+                        }}
+                    >
+
+                        <ScrollView style={{ flex: 1 }}>
+                            <View>
+                                <MyText text={'Announcements'} fontWeight='500' fontSize={24} textColor={Color.LIGHT_BLACK} fontFamily='Roboto' style={{ alignSelf: 'center' }} />
+                                <Book style={{ alignSelf: 'center' }} width={'80%'} height={'80%'}></Book>
+                                <MyText text={'Welcome to LEAD Physician®, the online leadership training program for Physicians By Physicians. This course provides solutions to your frustrations and questions that are specific to the culture and life of a physician. This course can give you the means to take control of every aspect of your life, including personal and professional satisfaction and overall wellness. Wishing you a great future ahead! ~ Elsie'} fontWeight='400' fontSize={14} textColor={Color.BLACK} fontFamily='Roboto' style={{ alignSelf: 'center' }} />
+                            </View>
+
+                        </ScrollView>
+
+                    </View>
+                </Modal >
             </View>
         </SafeAreaView>
     )

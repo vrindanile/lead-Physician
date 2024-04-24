@@ -305,4 +305,8 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: 20
     },
+    goalBar: {
+        width: dimensions.SCREEN_WIDTH * 0.90, height: 70,
+        borderRadius: 8, backgroundColor: Color.LIGHT_BLACK, marginBottom: 17, flexDirection: 'row'
+    }
 });
