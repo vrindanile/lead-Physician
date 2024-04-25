@@ -45,24 +45,7 @@ import Animated, {
     withTiming,
     Easing,
 } from 'react-native-reanimated';
-// import AccordionItem from '../../../components/AccordionItem/AccordionItem';
-// import ViewAll from '../../../components/ViewAll/ViewAll';
-// import FAB_Button from '../../../components/FAB_Button/FAB_Button';
-// import { createThumbnail } from 'react-native-create-thumbnail';
-// import Review from '../../../modals/Review/Review';
-// import VideoModal from '../../../components/VideoModal/VideoModal';
-// import Modal from 'react-native-modal';
-// import PrerequisiteModal from '../../../modals/PrerequisiteModal/PrerequisiteModal';
-// import CourseNotPurshasedModal from '../../../modals/CourseNotPurchasedModal/CourseNotPurshasedModal';
-// import RNFetchBlob from 'rn-fetch-blob';
-// import ViewPdf from '../../../modals/ViewPdf/ViewPdf';
-// import { setCartCount } from 'src/reduxToolkit/reducer/user';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import CourseTypeModal from '../../../modals/CourseType/CourseTypeModal';
-// import { shareItemHandler } from '../../../global/globalMethod';
-// import defaultImg from '../../../assets/images/default-content-creator-image.png';
 
-//svg image
 import thumbnailImg from '../../Global/Images/Thumbnail.svg'
 import PlayImg from '../../Global/Images/playButton.svg'
 import Star from '../../Global/Images/star.svg'
@@ -73,7 +56,7 @@ import Chapter from '../../Global/Images/savedBook.svg'
 import Module from '../../Global/Images/moduleImg.svg'
 import Arrow from '../../Global/Images/arrowRight.svg'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-
+import VideoModal from '../../Components/VideoModal/VideoModal';
 // const data = [
 //     {
 //         id: 1,
@@ -175,9 +158,16 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
     // const [showViewPdfModal, setShowViewPdfModal] = useState(false);
     // const [pdfLink, setPdfLink] = useState('');
     const [refreshing, setRefreshing] = useState(false);
+    const [showModal, setShowModal] = useState({ isVisible: false, data: null });
     // const [showCourseTypeModal, setShowCourseTypeModal] = useState(false)
     const [scrolling, setscrolling] = useState(false);
     const scrollY = useSharedValue(0);
+    const toggleModal = state => {
+        setShowModal({
+            isVisible: state.isVisible,
+            data: state.data,
+        });
+    };
     // useEffect(() => {
     //     // const unsubscribe = navigation.addListener('focus', () => {
     //     //   console.log('userToken', userToken);
@@ -679,7 +669,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                                 onPress={() => {
                                     setShowModal({
                                         isVisible: true,
-                                        data: productDetails,
+                                        // data: productDetails,
                                     });
                                 }}>
                                 {/* <Image source={require('assets/images/play-icon.png')} /> */}
@@ -858,7 +848,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                             style={{ marginLeft: 5 }}
                         />}
                     </View> */}
-                    {/* {console.log('klklk videp modal---->>>', showModal?.data)}
+                    {console.log('klklk videp modal---->>>', showModal?.data)}
                     {showModal.isVisible ? (
 
                         <VideoModal
@@ -870,7 +860,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                             }}
                         // {...props}
                         />
-                    ) : null} */}
+                    ) : null}
                     {/* <View style={styles.bottomRow}>
                         <View style={styles.chaptersRow}>
                             <Image source={require('assets/images/chapter-icon.png')} />

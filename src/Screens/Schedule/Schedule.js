@@ -379,6 +379,7 @@ const Schedule = (props) => {
 
             {/* <View style={{width:100,height:800}} /> */}
             {/* </ScrollView> */}
+            {console.log('my calendar date time picker---->>>', opendateModal)}
             {opendateModal ?
                 <View style={{ backgroundColor: '#fff', position: 'absolute', alignSelf: 'center', bottom: 0, width: '98%' }}>
                     <View style={{ width: '85%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 10 }}>

@@ -49,22 +49,44 @@ const Signup = ({ navigation }) => {
         index: 1,
         routes: [{ name: 'SignIn' }],
     });
+    const formatPhoneNumber = (number) => {
+        // Remove any non-numeric characters
+        const cleanedNumber = number.replace(/[^\d]/g, '');
+
+        // Apply US phone number format
+        const formattedNumber = cleanedNumber.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+
+        return formattedNumber;
+    };
+
+    const handleChange = (value) => {
+        console.log('my handel name---->>>', value);
+        setPhoneno(formatPhoneNumber(value));
+    };
     const Validation = () => {
         if (String(fullname).trim().length == 0) {
-            Toast.show({ text1: 'Please enter Name' });
+            Toast.show({ type: 'error', text1: 'Please enter First Name' });
             return false;
-        } else if (emailid == '') {
-            Toast.show({ text1: 'Please enter Email Address' });
+        } else if (lastName == '') {
+            Toast.show({ type: 'error', text1: 'Please enter Last Name' });
+            return false;
+        }
+        else if (emailid == '') {
+            Toast.show({ type: 'error', text1: 'Please enter Email Address' });
             return false;
         }
         else if (phoneno == '') {
-            Toast.show({ text1: 'Please enter Phone Number' });
+            Toast.show({ type: 'error', text1: 'Please enter Phone Number' });
             return false;
         } else if (password == '' || password.length <= 8) {
-            Toast.show({ text1: 'Please enter minimum 8 characters' });
+            Toast.show({ type: 'error', text1: 'Please enter minimum 8 characters' });
             return false;
         } else if (password == '') {
-            Toast.show({ text1: 'Please enter Password' });
+            Toast.show({ type: 'error', text1: 'Please enter Password' });
+            return false;
+
+        } else if (filePath == '') {
+            Toast.show({ type: 'error', text1: 'Please upload Profile Image' });
             return false;
         }
         return true;
@@ -82,19 +104,19 @@ const Signup = ({ navigation }) => {
         };
         launchCamera(options, response => {
             if (response.didCancel) {
-                Toast.show({ text1: 'User cancelled picking image' });
+                // Toast.show({ text1: 'User cancelled picking image' });
                 setShowImageSourceModal(false);
                 return;
             } else if (response.errorCode == 'camera_unavailable') {
-                Toast.show({ text1: 'Camera not available on device' });
+                // Toast.show({ text1: 'Camera not available on device' });
                 setShowImageSourceModal(false);
                 return;
             } else if (response.errorCode == 'permission') {
-                Toast.show({ text1: 'Permission not satisfied' });
+                // Toast.show({ text1: 'Permission not satisfied' });
                 setShowImageSourceModal(false);
                 return;
             } else if (response.errorCode == 'others') {
-                Toast.show({ text1: response.errorMessage });
+                // Toast.show({ text1: response.errorMessage });
                 setShowImageSourceModal(false);
                 return;
             }
@@ -121,7 +143,7 @@ const Signup = ({ navigation }) => {
                     openCamera();
                     console.log('Storage Permission Granted.');
                 } else {
-                    Toast.show({ text1: `Storage Permission Not Granted` });
+                    Toast.show({ type: 'error', text1: `Storage Permission Not Granted` });
                     // Alert.alert('Error', 'Storage Permission Not Granted');
                 }
             } catch (err) {
@@ -193,7 +215,7 @@ const Signup = ({ navigation }) => {
                 uri: filePath?.uri,
             });
             formaData.append('first_name', fullname);
-            formaData.append('last_name', 'iiii');
+            formaData.append('last_name', lastName);
             formaData.append('email', emailid);
             formaData.append('phone', phoneno);
             formaData.append('password', password);
@@ -211,7 +233,7 @@ const Signup = ({ navigation }) => {
                 navigation.dispatch(resetIndexGoToBottomTab);
             } else {
                 console.log('my response for signup?????--->>', resp)
-                Toast.show({ text1: resp.response.message });
+                Toast.show({ type: 'error', text1: resp.response.message });
                 // Handle error response
             }
         } catch (err) {
@@ -300,9 +322,11 @@ const Signup = ({ navigation }) => {
                             imageComponent={<Call width={24} height={24} />}
                             //  placeholder='Email address'
                             value={phoneno}
-                            onChangeText={(text) => {
-                                setPhoneno(text)
-                            }}
+                            // onChangeText={(text) => {
+                            //     setPhoneno(text)
+                            // }}
+                            onChangeText={handleChange}
+                            keyboardType='number-pad'
                             placeholder={'Phone'}
                         >
                         </CustomTextBox></View>

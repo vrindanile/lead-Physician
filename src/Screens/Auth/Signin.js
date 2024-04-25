@@ -49,11 +49,11 @@ const SignIn = ({ navigation }) => {
     const LoginPressed = async () => {
         var EmailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]*)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))\s*$/;
         if (emailid == '') {
-            Toast.show({ text1: 'Enter Email ID' });
+            Toast.show({ type: 'error', text1: 'Enter Email ID' });
         } else if (!EmailReg.test(emailid)) {
-            Toast.show({ text1: 'Enter Valid Email ID' });
+            Toast.show({ type: 'error', text1: 'Enter Valid Email ID' });
         } else if (password == '') {
-            Toast.show({ text1: 'Enter Password' });
+            Toast.show({ type: 'error', text1: 'Enter Password' });
         } else {
             setLoading(true);
             var data = {

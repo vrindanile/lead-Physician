@@ -14,7 +14,7 @@ import Eye from '../Global/Images/eye.svg';
 // global
 const H = Dimensions.get('screen').height;
 const W = Dimensions.get('screen').width;
-const CustomTextBox = ({ imageComponent, placeholder, value, onChangeText, err, secureTextEntry = false }) => {
+const CustomTextBox = ({ imageComponent, placeholder, value, onChangeText, err, secureTextEntry = false, keyboardType = '' }) => {
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(secureTextEntry);
 
     const toggleSecureEntry = () => {
@@ -36,6 +36,7 @@ const CustomTextBox = ({ imageComponent, placeholder, value, onChangeText, err, 
                 placeholderTextColor='#959FA6'
                 onChangeText={onChangeText}
                 placeholder={placeholder}
+                keyboardType={keyboardType}
             />
             {secureTextEntry && (
                 <TouchableOpacity style={styles.togglePassword} onPress={toggleSecureEntry}>

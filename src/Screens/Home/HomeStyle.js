@@ -308,5 +308,15 @@ export const styles = StyleSheet.create({
     goalBar: {
         width: dimensions.SCREEN_WIDTH * 0.90, height: 70,
         borderRadius: 8, backgroundColor: Color.LIGHT_BLACK, marginBottom: 17, flexDirection: 'row'
+    },
+    buttonView: {
+        width: dimensions.SCREEN_WIDTH * 0.80, height: 50,
+        backgroundColor: '#959FA6',
+        marginVertical: 16,
+        alignSelf: 'center',
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

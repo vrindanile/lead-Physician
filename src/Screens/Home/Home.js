@@ -22,6 +22,7 @@ import VideoChat from '../../Global/Images/videoChat.svg'
 import Zoom from '../../Global/Images/Zoom.svg'
 import Modal from 'react-native-modal';
 import KeySvg from '../../Global/Images/logo.svg';
+import ArrowLeft from '../../Global/Images/arrowLeft.svg'
 const Home = ({ navigation }) => {
     // const dispatch = useDispatch();
     const [animating, setAnimating] = useState(true);
@@ -53,17 +54,17 @@ const Home = ({ navigation }) => {
     ]
     const physicianCourse = [{
         id: '1',
-        title: 'Module 01',
+        title: 'Course 01',
         status: 'Completed'
     },
     {
         id: '2',
-        title: 'Module 01',
+        title: 'Course 02',
         status: 'Ongoing'
     },
     {
         id: '3',
-        title: 'Module 01',
+        title: 'Course 03',
         status: 'Pending'
     }]
     const schedule = [{
@@ -85,9 +86,9 @@ const Home = ({ navigation }) => {
     };
     const onRefresh = React.useCallback(() => {
         // checkcon();
-        wait(2000).then(() => {
-            setRefreshing(false);
-        });
+        // wait(2000).then(() => {
+        //     setRefreshing(false);
+        // });
     }, []);
     const RenderItem = ({ item }) => {
 
@@ -121,7 +122,9 @@ const Home = ({ navigation }) => {
     };
     const RenderItemLead = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.teamView}>
+            <TouchableOpacity style={styles.teamView} onPress={() => {
+                navigation.navigate('CourseDetail')
+            }}>
                 <View style={styles.circularBackground}>
                     <Bat style={{ alignSelf: 'center' }}></Bat>
 
@@ -426,7 +429,7 @@ const Home = ({ navigation }) => {
                     </View>
                 </ScrollView>
 
-                <Modal
+                {/* <Modal
                     isVisible={editModal}
                     swipeDirection="down"
 
@@ -467,7 +470,39 @@ const Home = ({ navigation }) => {
                         </ScrollView>
 
                     </View>
-                </Modal >
+                </Modal > */}
+
+                <Modal
+                    isVisible={editModal}
+                    swipeDirection="down"
+                    onBackdropPress={() => setEditModal(false)}
+                    onSwipeComplete={(e) => {
+                        setEditModal(false)
+                    }}
+                    scrollTo={() => { }}
+                    scrollOffset={1}
+                    propagateSwipe={true}
+                    coverScreen={false}
+                    backdropColor='transparent'
+                    style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+                >
+                    <View style={{ height: '70%', backgroundColor: '#fff5f7', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 20 }}>
+                        <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+                            <View>
+                                <MyText text={'Announcements'} fontWeight='500' fontSize={24} textColor={Color.LIGHT_BLACK} fontFamily='Roboto' style={{ alignSelf: 'center' }} />
+                                <Book style={{ alignSelf: 'center' }} width={276} height={306}></Book>
+                                <MyText text={'Welcome to LEAD Physician®, the online leadership training program for Physicians By Physicians. This course provides solutions to your frustrations and questions that are specific to the culture and life of a physician. This course can give you the means to take control of every aspect of your life, including personal and professional satisfaction and overall wellness. Wishing you a great future ahead! ~ Elsie'} fontWeight='400' fontSize={14} textColor={'#66757F'} fontFamily='Roboto' style={{ alignSelf: 'center', textAlign: 'center' }} />
+                                <TouchableOpacity style={styles.buttonView} onPress={() => { setEditModal(false) }}>
+                                    <ArrowLeft></ArrowLeft>
+                                    <MyText text={'Back to home'} fontWeight='500' fontSize={14} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center', marginHorizontal: 6 }} />
+                                </TouchableOpacity>
+                            </View>
+
+                        </ScrollView>
+
+                    </View>
+                </Modal>
+
             </View>
         </SafeAreaView>
     )

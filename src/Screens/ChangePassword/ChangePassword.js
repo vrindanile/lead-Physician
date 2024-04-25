@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, ActivityIndicator, tyleSheet, Button, TouchableOpacity, StyleSheet, Dimensions, TextInput, ScrollView, SafeAreaView, KeyboardAvoidingView, ImageBackground, PermissionsAndroid, } from 'react-native'
 import { requestPostApi, REGISTER, postAPI } from '../../Global/Service'
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import MyText from '../../Components/MyText/MyText';
 import Toast from 'react-native-toast-message';
@@ -118,6 +118,20 @@ const ChangePassword = ({ navigation }) => {
         }
         setLoading(false);
     };
+    const formatPhoneNumber = (number) => {
+        // Remove any non-numeric characters
+        const cleanedNumber = number.replace(/[^\d]/g, '');
+
+        // Apply US phone number format
+        const formattedNumber = cleanedNumber.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+
+        return formattedNumber;
+    };
+
+    const handleChange = (value) => {
+        console.log('my formared phone umber--->>', value)
+        setPhoneNumber(formatPhoneNumber(value));
+    };
     return (
 
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -160,9 +174,10 @@ const ChangePassword = ({ navigation }) => {
                                 width={24} height={24} />}
                             placeholder='Password'
                             value={password}
-                            onChangeText={(text) => {
-                                setPassword(text)
-                            }}
+                            // onChangeText={(text) => {
+                            //     setPassword(text)
+                            // }}
+                            onChangeText={handleChange}
                             secureTextEntry={true}
                             style={{ color: 'black', }}
                             placeholderTextColor='black'
