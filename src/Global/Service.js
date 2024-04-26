@@ -13,6 +13,11 @@ export const BASE_URL = `https://www.niletechinnovations.com/projects/leadphysic
 
 export const LOGIN = `login`;
 export const REGISTER = `register`;
+export const SET_GOAL = `goal`
+export const GET_GOAL = `get-goal`
+export const DELETE_GOAL = `delete-goal`
+
+
 export const HOME = `home`;
 export const DETAILS = `details`;
 export const SUGGESTED_LIST = `suggested-list`;

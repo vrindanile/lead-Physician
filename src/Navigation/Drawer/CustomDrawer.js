@@ -30,7 +30,7 @@ import Logo from '../../Global/Images/logo.svg'
 import Profile from '../../Global/Images/profile.svg'
 import Home from '../../Global/Images/homeWhite.svg';
 import Like from '../../Global/Images/like.svg'
-import Couser from '../../Global/Images/book.svg'
+import Couser from '../../Global/Images/navbarBook.svg'
 import Subscription from '../../Global/Images/dollarSquare.svg'
 import About from '../../Global/Images/info.svg'
 import Help from '../../Global/Images/headphone.svg'
@@ -77,7 +77,7 @@ const CustomDrawer = ({ navigation }) => {
         // });
     };
     const gotoMyOrders = () => {
-        // navigation.navigate(ScreenNames.MY_ORDERS);
+        navigation.navigate('GoalsList');
     };
     const gotoWelcome = () =>
         CommonActions.reset({
@@ -182,11 +182,18 @@ const CustomDrawer = ({ navigation }) => {
                     </View>
 
                     <View style={{ flexDirection: 'row' }}>
-                        <Couser></Couser>
+                        <Couser ></Couser>
                         <DrawerItemList
                             Title="My Courses"
                         // image={require('assets/images/my-courses-sb.png')}
                         // onPress={gotoMyOrders}
+                        /></View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Couser ></Couser>
+                        <DrawerItemList
+                            Title="My Goals"
+                            // image={require('assets/images/my-courses-sb.png')}
+                            onPress={gotoMyOrders}
                         /></View>
                     <View style={{ flexDirection: 'row' }}>
                         <Subscription></Subscription>

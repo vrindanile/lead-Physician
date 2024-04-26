@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 import moment from 'moment';
 import { styles } from './SetGoalStyle';
-import { requestPostApi, REGISTER, postAPI } from '../../Global/Service'
+import { requestPostApi, REGISTER, postAPI, SET_GOAL, postApiWithToken } from '../../Global/Service'
 import { useDispatch } from 'react-redux';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import MyText from '../../Components/MyText/MyText';
@@ -32,10 +32,14 @@ import CalendarImg from '../../Global/Images/calendarWhite.svg'
 import Google from '../../Global/Images/googleIcon.svg';
 import Facebook from '../../Global/Images/facebookLogo.svg'
 import { Calendar } from 'react-native-calendars';
+import { connect, useSelector } from 'react-redux';
 const SetGoal = ({ navigation }) => {
     const H = Dimensions.get('screen').height;
     const W = Dimensions.get('screen').width;
     const [multiLineText, setMultiLineText] = useState('');
+    const userToken = useSelector(state => state.user.userToken);
+    console.log('my iser token--->>', userToken);
+    const userInfo = useSelector(state => state.user.userInfo);
     const dispatch = useDispatch();
     const countryCodes = [
         { code: '+1', label: 'United States' },
@@ -50,6 +54,7 @@ const SetGoal = ({ navigation }) => {
     const [phoneno, setPhoneno] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState('')
+    const [activeItem, setActiveItem] = useState('')
     const [My_Alert, setMy_Alert] = useState(false)
     const [alert_sms, setalert_sms] = useState('')
     const [filePath, setFilePath] = useState('');
@@ -77,8 +82,10 @@ const SetGoal = ({ navigation }) => {
         title: 'B-Type Goals'
     }]
     // Function to handle item press
-    const handleItemPress = (index) => {
+    const handleItemPress = (index, item) => {
+        { console.log('my seletcted item---->>', item) }
         setActiveIndex(index); // Set active item index
+        setActiveItem(item)
     };
     const RenderSchdule = ({ item, index }) => {
         const backgroundColor = index === activeIndex ? Color.PRIMARY : 'white';
@@ -86,28 +93,42 @@ const SetGoal = ({ navigation }) => {
 
         return (
             <TouchableOpacity style={[styles.groupView, { backgroundColor }]}
-                onPress={() => handleItemPress(index)} // Call handleItemPress on press
+                onPress={() => handleItemPress(index, item.title)} // Call handleItemPress on press
             >
                 <MyText text={item.title} fontWeight='600' fontSize={16} textColor={text} fontFamily='Roboto' style={{}} />
             </TouchableOpacity >
         )
     }
     const Validation = () => {
-        if (String(fullname).trim().length == 0) {
-            Toast.show({ text1: 'Please enter Name' });
+        { console.log('my selected dte>>>>>---->.', activeItem) }
+        if (String(multiLineText).trim().length === 0) {
+            Toast.show({ type: 'error', text1: 'Please enter C-Type goal statement' });
             return false;
-        } else if (emailid == '') {
-            Toast.show({ text1: 'Please enter Email Address' });
+
+        } else if (selectedDate === null) {
+            Toast.show({ type: 'error', text1: 'Please enter the date when you will achieve this goal' });
             return false;
         }
-        else if (phoneno == '') {
-            Toast.show({ text1: 'Please enter Phone Number' });
+        else if (task === '') {
+            Toast.show({ type: 'error', text1: 'Please enter the details you will be needing to reach this goal' });
             return false;
-        } else if (password == '' || password.length <= 8) {
-            Toast.show({ text1: 'Please enter minimum 8 characters' });
+        } else if (activeItem === '') {
+            Toast.show({ text1: 'Please enter the steps to achieve the goal' });
             return false;
-        } else if (password == '') {
-            Toast.show({ text1: 'Please enter Password' });
+        } else if (goal == '') {
+            Toast.show({ text1: 'Please enter what wil you accomplish in one year' });
+            return false;
+        }
+        else if (goalSix == '') {
+            Toast.show({ text1: 'Please enter what wil you accomplish in six month' });
+            return false;
+        }
+        else if (goalOneYear == '') {
+            Toast.show({ text1: 'Please enter what wil you accomplish in one year' });
+            return false;
+        }
+        else if (accountabilityPartner == '') {
+            Toast.show({ text1: 'Please enter your accountability partner' });
             return false;
         }
         return true;
@@ -118,36 +139,41 @@ const SetGoal = ({ navigation }) => {
             return;
         }
         try {
-            const formaData = new FormData();
-            const imageName = filePath?.uri?.slice(
-                filePath?.uri?.lastIndexOf('/'),
-                filePath?.uri?.length,
-            );
-            formaData.append('profile_image', {
-                name: imageName,
-                type: filePath?.type,
-                uri: filePath?.uri,
-            });
-            formaData.append('first_name', fullname);
-            formaData.append('last_name', 'iiii');
-            formaData.append('email', emailid);
-            formaData.append('phone', phoneno);
-            formaData.append('password', password);
+            // const formaData = new FormData();
+            // formaData.append('goal_statement', multiLineText);
+            // formaData.append('achieve_date', selectedDate);
+            // formaData.append('goal_for_me', task);
+            // formaData.append('goal_type', activeItem);
+            // formaData.append('one_month_milestones', goal);
+            // formaData.append('one_year_goal', goalOneYear);
+            // formaData.append('accountability_partner', accountabilityPartner);
+            const data = {
+
+                goal_statement: multiLineText,
+                achieve_date: selectedDate,
+                goal_for_me: task,
+                goal_type: activeItem,
+                six_month_milestones: goalSix,
+                one_month_milestones: goal,
+                one_year_goal: goalOneYear,
+                accountability_partner: accountabilityPartner
+
+            }
             setLoading(true);
 
             setLoading(true);
-            console.log('my uiuiui--->>', formaData)
+            // console.log('my uiuiui--->>', data)
 
-            const resp = await postAPI(REGISTER, formaData);
-            console.log('my respinseee--->>', resp.status === true);
-            if (resp.status === true) {
+            const resp = await postApiWithToken(userToken, SET_GOAL, data);
+            console.log('my respinseee--->>', resp.data.status);
+            if (resp.data.status === true) {
                 // Handle successful response
-                Toast.show({ text1: resp.response.message });
-                console.log('my response for signup?????--->>', resp)
-                navigation.dispatch(resetIndexGoToBottomTab);
+                Toast.show({ text1: resp.data.message });
+                navigation.goBack()
+                // navigation.dispatch(resetIndexGoToBottomTab);
             } else {
                 console.log('my response for signup?????--->>', resp)
-                Toast.show({ text1: resp.response.message });
+                Toast.show({ text1: resp.data.message });
                 // Handle error response
             }
         } catch (err) {
@@ -205,7 +231,7 @@ const SetGoal = ({ navigation }) => {
                                     marginHorizontal: 14,
                                     color: Color.BLACK,
                                 }}>
-                                {moment(selectedDate).format('MM/DD/YYYY')}
+                                {selectedDate === null ? '' : moment(selectedDate).format('MM/DD/YYYY')}
                             </Text>
                             <View style={styles.calendarImg}>
 
@@ -359,9 +385,9 @@ const SetGoal = ({ navigation }) => {
                 {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
             </ScrollView>
             <View style={{ height: 100, width: '100%', backgroundColor: '#F7FAEB', borderTopRightRadius: 20, borderTopLeftRadius: 20, borderWidth: 1, borderColor: Color.PRIMARY, justifyContent: 'center' }}>
-                <View style={{ width: dimensions.SCREEN_WIDTH * 0.80, height: 50, backgroundColor: Color.PRIMARY, alignSelf: 'center', borderRadius: 10, justifyContent: 'center' }}>
+                <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH * 0.80, height: 50, backgroundColor: Color.PRIMARY, alignSelf: 'center', borderRadius: 10, justifyContent: 'center' }} onPress={() => { signUpUser() }}>
                     <MyText text='Save & Set Your Goal' fontWeight='700' fontSize={14} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center' }} />
-                </View>
+                </TouchableOpacity>
                 {/* Content for the bottom view */}
             </View>
 
