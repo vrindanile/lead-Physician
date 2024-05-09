@@ -91,7 +91,7 @@ const Welcome = ({ navigation }) => {
                             style={{ textAlign: 'center', alignSelf: 'center', marginTop: 5, }}
                         />
                         <MyText
-                            text={`And `}
+                            text={` & `}
                             fontWeight="normal"
                             fontSize={16}
                             textColor={Color.LIGHT_BLACK}

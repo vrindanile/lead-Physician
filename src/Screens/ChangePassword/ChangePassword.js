@@ -46,76 +46,88 @@ const ChangePassword = ({ navigation }) => {
     const [My_Alert, setMy_Alert] = useState(false)
     const [alert_sms, setalert_sms] = useState('')
     const [filePath, setFilePath] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [oldPassword, setOldPassword] = useState('')
     const [showImageSourceModal, setShowImageSourceModal] = useState(false);
     const resetIndexGoToBottomTab = CommonActions.reset({
         index: 1,
         routes: [{ name: 'SignIn' }],
     });
     const Validation = () => {
-        if (String(fullname).trim().length == 0) {
-            Toast.show({ text1: 'Please enter Name' });
-            return false;
-        } else if (emailid == '') {
-            Toast.show({ text1: 'Please enter Email Address' });
-            return false;
-        }
-        else if (phoneno == '') {
-            Toast.show({ text1: 'Please enter Phone Number' });
-            return false;
-        } else if (password == '' || password.length <= 8) {
-            Toast.show({ text1: 'Please enter minimum 8 characters' });
-            return false;
-        } else if (password == '') {
-            Toast.show({ text1: 'Please enter Password' });
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
+
+        if (oldPassword?.trim()?.length === 0) {
+            Toast.show({ type: 'error', text1: 'Please enter Old Password' });
             return false;
         }
-        return true;
+        else if (!regex.test(oldPassword)) {
+            Toast.show({ type: 'error', text1: 'Old Password must has at least eight characters that include 1 lowercase character, 1 uppercase character, 1 number, and at least one special character.', })
+            return false;
+        }
+        else if (password?.trim()?.length === 0) {
+            Toast.show({ type: 'error', text1: 'Please enter New Password' });
+            return false;
+        }
+        else if (!regex.test(password)) {
+            Toast.show({ type: 'error', text1: 'New Password must has at least eight characters that include 1 lowercase character, 1 uppercase character, 1 number, and at least one special character.', })
+            return false;
+        }
+        else if (confirmPassword?.trim()?.length === 0) {
+            Toast.show({ type: 'error', text1: 'Please enter Confirm Password' });
+            return false;
+        } else if (password !== confirmPassword) {
+            Toast.show({ type: 'error', text1: 'Password and Confirm Password does not match' });
+            return false;
+        }
+        return true
+
     };
 
     const signUpUser = async () => {
         if (!Validation()) {
-            return;
+            return
         }
 
+        navigation.goBack()
 
 
-        try {
-            const formaData = new FormData();
-            const imageName = filePath?.uri?.slice(
-                filePath?.uri?.lastIndexOf('/'),
-                filePath?.uri?.length,
-            );
-            formaData.append('profile_image', {
-                name: imageName,
-                type: filePath?.type,
-                uri: filePath?.uri,
-            });
-            formaData.append('first_name', fullname);
-            formaData.append('last_name', 'iiii');
-            formaData.append('email', emailid);
-            formaData.append('phone', phoneno);
-            formaData.append('password', password);
-            setLoading(true);
+        // try {
+        //     const formaData = new FormData();
+        //     const imageName = filePath?.uri?.slice(
+        //         filePath?.uri?.lastIndexOf('/'),
+        //         filePath?.uri?.length,
+        //     );
+        //     formaData.append('profile_image', {
+        //         name: imageName,
+        //         type: filePath?.type,
+        //         uri: filePath?.uri,
+        //     });
+        //     formaData.append('first_name', fullname);
+        //     formaData.append('last_name', 'iiii');
+        //     formaData.append('email', emailid);
+        //     formaData.append('phone', phoneno);
+        //     formaData.append('password', password);
+        //     setLoading(true);
 
-            setLoading(true);
-            console.log('my uiuiui--->>', formaData)
+        //     setLoading(true);
+        //     console.log('my uiuiui--->>', formaData)
 
-            const resp = await postAPI(REGISTER, formaData);
-            console.log('my respinseee--->>', resp.status === true);
-            if (resp.status === true) {
-                // Handle successful response
-                Toast.show({ text1: resp.response.message });
-                console.log('my response for signup?????--->>', resp)
-                navigation.dispatch(resetIndexGoToBottomTab);
-            } else {
-                console.log('my response for signup?????--->>', resp)
-                Toast.show({ text1: resp.response.message });
-                // Handle error response
-            }
-        } catch (err) {
+        //     const resp = await postAPI(REGISTER, formaData);
+        //     console.log('my respinseee--->>', resp.status === true);
+        //     if (resp.status === true) {
+        //         // Handle successful response
+        //         Toast.show({ text1: resp.response.message });
+        //         console.log('my response for signup?????--->>', resp)
+        //         navigation.dispatch(resetIndexGoToBottomTab);
+        //     } else {
+        //         console.log('my response for signup?????--->>', resp)
+        //         Toast.show({ text1: resp.response.message });
+        //         // Handle error response
+        //     }
+        // } catch (err) {
 
-            console.log('error in signUpUser ioioi---->>>', err);
-        }
+        //     console.log('error in signUpUser ioioi---->>>', err);
+        // }
         setLoading(false);
     };
     const formatPhoneNumber = (number) => {
@@ -156,9 +168,9 @@ const ChangePassword = ({ navigation }) => {
                             imageComponent={< Lock
                                 width={24} height={24} />}
                             placeholder='Password'
-                            value={password}
+                            value={oldPassword}
                             onChangeText={(text) => {
-                                setPassword(text)
+                                setOldPassword(text)
                             }}
                             secureTextEntry={true}
                             style={{ color: 'black', }}
@@ -174,10 +186,10 @@ const ChangePassword = ({ navigation }) => {
                                 width={24} height={24} />}
                             placeholder='Password'
                             value={password}
-                            // onChangeText={(text) => {
-                            //     setPassword(text)
-                            // }}
-                            onChangeText={handleChange}
+                            onChangeText={(text) => {
+                                setPassword(text)
+                            }}
+                            // onChangeText={handleChange}
                             secureTextEntry={true}
                             style={{ color: 'black', }}
                             placeholderTextColor='black'
@@ -191,9 +203,9 @@ const ChangePassword = ({ navigation }) => {
                             imageComponent={< Lock
                                 width={24} height={24} />}
                             placeholder='Password'
-                            value={password}
+                            value={confirmPassword}
                             onChangeText={(text) => {
-                                setPassword(text)
+                                setConfirmPassword(text)
                             }}
                             secureTextEntry={true}
                             style={{ color: 'black', }}
@@ -202,9 +214,9 @@ const ChangePassword = ({ navigation }) => {
                         >
                         </CustomTextBox></View>
                     <TouchableOpacity onPress={() => {
-                        navigation.goBack('')
+                        // navigation.goBack('')
 
-                        // signUpUser()
+                        signUpUser()
                     }} style={{ marginTop: 20 }}>
                         <CustomButtonBlue name="Save"></CustomButtonBlue>
                     </TouchableOpacity>

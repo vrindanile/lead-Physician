@@ -4,6 +4,8 @@ import { Text, View, Image, ActivityIndicator, tyleSheet, Button, TouchableOpaci
 import { requestPostApi, REGISTER, postAPI } from '../../Global/Service'
 import { useDispatch } from 'react-redux';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUser, setUserToken } from '../../reduxToolkit/reducer/user';
 import Toast from 'react-native-toast-message';
 import Loader from '../../Components/Loader';
 import axios from 'axios';
@@ -47,7 +49,7 @@ const Signup = ({ navigation }) => {
     const [showImageSourceModal, setShowImageSourceModal] = useState(false);
     const resetIndexGoToBottomTab = CommonActions.reset({
         index: 1,
-        routes: [{ name: 'SignIn' }],
+        routes: [{ name: 'BottomTab' }],
     });
     const formatPhoneNumber = (number) => {
         // Remove any non-numeric characters
@@ -64,6 +66,9 @@ const Signup = ({ navigation }) => {
         setPhoneno(formatPhoneNumber(value));
     };
     const Validation = () => {
+        var EmailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
+
         if (String(fullname).trim().length == 0) {
             Toast.show({ type: 'error', text1: 'Please enter First Name' });
             return false;
@@ -75,18 +80,26 @@ const Signup = ({ navigation }) => {
             Toast.show({ type: 'error', text1: 'Please enter Email Address' });
             return false;
         }
+        else if (!EmailReg.test(emailid)) {
+            Toast.show({ type: 'error', text1: 'Plase enter Valid Emailid' })
+
+        }
         else if (phoneno == '') {
             Toast.show({ type: 'error', text1: 'Please enter Phone Number' });
             return false;
-        } else if (password == '' || password.length <= 8) {
-            Toast.show({ type: 'error', text1: 'Please enter minimum 8 characters' });
+        }
+
+        else if (phoneno.length <= 10) {
+            Toast.show({ type: 'error', text1: 'Please enter valid Phone Number' });
             return false;
-        } else if (password == '') {
+        }
+        else if (password == '') {
             Toast.show({ type: 'error', text1: 'Please enter Password' });
             return false;
-
+        } else if (!regex.test(password)) {
+            Toast.show({ type: 'error', text1: 'Password must has at least eight characters that include 1 lowercase character, 1 uppercase character, 1 number, and at least one special character.', })
         } else if (filePath == '') {
-            Toast.show({ type: 'error', text1: 'Please upload Profile Image' });
+            Toast.show({ type: 'error', text1: 'Please upload Profile Image', });
             return false;
         }
         return true;
@@ -171,7 +184,7 @@ const Signup = ({ navigation }) => {
             if (response.didCancel) {
                 // Alert.alert('User cancelled camera picker');
                 setShowImageSourceModal(false);
-                Toast.show({ text1: 'User cancelled image picker' });
+                // Toast.show({ text1: 'User cancelled image picker' });
                 // Alert.alert('User cancelled image picker');
                 return;
             } else if (response.errorCode == 'camera_unavailable') {
@@ -225,11 +238,20 @@ const Signup = ({ navigation }) => {
             console.log('my uiuiui--->>', formaData)
 
             const resp = await postAPI(REGISTER, formaData);
-            console.log('my respinseee--->>', resp.status === true);
+            console.log('my respinseee--->>', resp?.response);
             if (resp.status === true) {
                 // Handle successful response
-                Toast.show({ text1: resp.response.message });
-                console.log('my response for signup?????--->>', resp)
+
+                console.log('sign in jsonValue', resp?.response?.user);
+                await AsyncStorage.setItem('userToken', resp?.response?.authorization?.token);
+                const jsonValue = JSON.stringify(resp?.response?.user);
+                console.log('sign in jsonValue', jsonValue);
+                await AsyncStorage.setItem('userInfo', jsonValue);
+                console.log('sign in --------nValue', resp?.response?.authorization?.token);
+                dispatch(setUserToken(resp?.response?.authorization?.token));
+                console.log('after dispath');
+                dispatch(setUser(resp?.response?.user));
+                setLoading(false)
                 navigation.dispatch(resetIndexGoToBottomTab);
             } else {
                 console.log('my response for signup?????--->>', resp)
@@ -355,12 +377,12 @@ const Signup = ({ navigation }) => {
                     <View style={{ alignSelf: 'center', marginTop: 10, flexDirection: 'row' }}>
                         <Text style={styles.myText}>Already have an account?
                         </Text>
-                        <TouchableOpacity style={{ marginLeft: 3 }} onPress={() => { navigation.navigate('SignIn') }}>
+                        <TouchableOpacity style={{ marginLeft: 3, marginBottom: 40 }} onPress={() => { navigation.navigate('SignIn') }}>
                             <Text style={styles.textunderline}>Sign In</Text>
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{ flexDirection: 'row', marginTop: 16, alignSelf: 'center' }}>
+                    {/* <View style={{ flexDirection: 'row', marginTop: 16, alignSelf: 'center' }}>
                         <View style={styles.line}>
                         </View>
                         <Text style={styles.txt}>OR</Text>
@@ -378,7 +400,7 @@ const Signup = ({ navigation }) => {
                             <Text style={styles.socialTxt}>Signup With Google</Text>
                         </View>
 
-                    </View>
+                    </View> */}
                 </View>
 
                 {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}

@@ -24,6 +24,9 @@ import MyHeader from '../../Components/MyHeader/MyHeader';
 // import CustomButton from '../../components/CustomButton/CustomButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import EventCalendar from 'react-native-events-calendar';
+import { getApiWithToken, GET_SCHDULE } from '../../Global/Service';
+import { connect, useSelector } from 'react-redux';
+import { useIsFocused } from "@react-navigation/native";
 // import useKeyboard from '../../components/useKeyboard';
 //svg image
 import Pending from '../../Global/Images/timer.svg'
@@ -32,7 +35,8 @@ import OnGoing from '../../Global/Images/clock.svg'
 import Zoom from '../../Global/Images/Zoom.svg'
 import Calendar from '../../Global/Images/calendarWhite.svg'
 // const axios = require('axios');
-const Schedule = (props) => {
+const Schedule = (navigation) => {
+    console.log('my navigation--->>', navigation);
     const [DATA2, setDATA2] = useState(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
     const [selected, setselected] = useState(true)
     const [click1, setclick1] = useState('Mon')
@@ -50,18 +54,43 @@ const Schedule = (props) => {
     const [apiDate, setapiDate] = useState('2024-01-01')
     const [events, setEvents] = useState([
         {
-            start: '2024-04-10 02:00:00', // yyyy/mm/dd
-            end: '2024-04-10 04:00:00',
-            title: 'New Year Party',
-            summary: 'xyz Location',
-            name: 'ashish',
-        }
-    ]);
-    // useEffect(() => {
-    //     //  getdates()
+            "start": "2024-05-06 10:39:00",
+            "end": "2024-05-06 11:35:00",
+            "meeting_title": "tetsing meeting befor 12=2",
+            "user_id": "6",
+            "schedule_start_time": "10:39:00",
+            "schedule_start_date": "2024-05-06",
+            "schedule_end_date": "2024-05-06",
+            "schedule_end_time": "11:35:00",
+            "zoom_link": "google.com",
+            "note": "k k",
+            "meeting_type": "Weekly",
+            "created_at": "2024-05-06T13:05:55.000000Z",
+            "updated_at": "2024-05-06T13:05:55.000000Z"
+        },
 
-    //     getHome(new Date(), 'date')
-    // }, [])
+    ]);
+    const isFocus = useIsFocused()
+    // React.useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         setLoading(true);
+    //         getCartCount()
+    //         setLoading(false);
+    //     });
+    //     // Return the function to unsubscribe from the event so it gets removed on unmount
+    //     return unsubscribe;
+    // }, [isFocus]);
+    useEffect(() => {
+        setLoading(true);
+        // getDetails()
+        setLoading(false);
+    }, []);
+    const userToken = useSelector(state => state.user.userToken);
+    console.log('my user Toeknnn--->>>', userToken);
+    useEffect(() => {
+        //  getdates()
+        getHome(new Date(), 'date')
+    }, [])
 
     const getdates = async () => {
         setLoading(true)
@@ -93,6 +122,39 @@ const Schedule = (props) => {
         var mydate = dateformates(mm, dd, yy)
         return mydate
     }
+    // const getHome = async (dat, withs) => {
+    //     setLoading(true)
+    //     console.log('=====================dat===============');
+    //     console.log(dat);
+    //     var mm = dat.toString().substring(4, 7)
+    //     var dd = dat.toString().substring(8, 10)
+    //     var yy = dat.toString().substring(11, 15)
+    //     var mydate2 = dateformates2(mm, dd, yy)
+    //     var mydate = dateformates(mm, dd, yy)
+    //     setapiDate(mydate2)
+    //     setdisplaydate(mydate)
+    //     console.log('============mydate2========================', mydate2);
+
+    //     // let formdata = new FormData();
+    //     // formdata.append("date", mydate2);
+    //     const { responseJson, err } = await requestPostApi(home, formdata, 'POST', user.token)
+    //     setLoading(false)
+    //     console.log('the home==>>', responseJson)
+    //     if (err == null) {
+    //         if (responseJson.status) {
+    //             setEvents(responseJson.data)
+    //             setDATA(responseJson.data)
+    //             //  setclick1(dat)
+    //         } else {
+    //             setalert_sms(responseJson.message)
+    //             setMy_Alert(true)
+    //         }
+    //     } else {
+    //         setalert_sms(err)
+    //         setMy_Alert(true)
+    //     }
+    // }
+
     const getHome = async (dat, withs) => {
         setLoading(true)
         console.log('=====================dat===============');
@@ -102,30 +164,28 @@ const Schedule = (props) => {
         var yy = dat.toString().substring(11, 15)
         var mydate2 = dateformates2(mm, dd, yy)
         var mydate = dateformates(mm, dd, yy)
+        console.log('did it reach to this point', mydate2, mydate);
         setapiDate(mydate2)
         setdisplaydate(mydate)
         console.log('============mydate2========================', mydate2);
 
-        let formdata = new FormData();
-        formdata.append("date", mydate2);
-        const { responseJson, err } = await requestPostApi(home, formdata, 'POST', user.token)
+        // let formdata = new FormData();
+        // formdata.append("date", mydate2);
+        const resp = await getApiWithToken(userToken, GET_SCHDULE);
+        console.log('get profile2222 in getHome----->>>>', resp?.data?.data);
         setLoading(false)
-        console.log('the home==>>', responseJson)
-        if (err == null) {
-            if (responseJson.status) {
-                setEvents(responseJson.data)
-                setDATA(responseJson.data)
-                //  setclick1(dat)
-            } else {
-                setalert_sms(responseJson.message)
-                setMy_Alert(true)
-            }
+        console.log('the home==>>', resp?.data?.status)
+
+        if (resp?.data?.status) {
+            setEvents(resp?.data?.data)
+            setDATA(resp?.data?.data)
+            //  setclick1(dat)
         } else {
-            setalert_sms(err)
+            setalert_sms(responseJson.message)
             setMy_Alert(true)
         }
-    }
 
+    }
     const dateformates2 = (month, day, year) => {
         if (month == 'Jan') {
             return year + '-01-' + day
@@ -154,6 +214,7 @@ const Schedule = (props) => {
         }
     }
     const dateformates = (month, day, year) => {
+        console.log('my dates--->>', month, day, year);
         if (month == 'Jan') {
             return '01-' + day + '-' + year
         } else if (month == 'Feb') {
@@ -210,6 +271,24 @@ const Schedule = (props) => {
         Alert.alert(JSON.stringify(event));
 
     };
+
+    //get data 
+    // const getDetails = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const resp = await getApiWithToken(userToken, GET_SCHDULE);
+    //         console.log('get profile2222----->>>>', resp?.data?.data);
+    //         if (resp?.data?.success) {
+    //             // setProfile(resp?.data?.data)
+    //             setEvents(resp?.data?.data)
+    //         } else {
+    //             // Toast.show({ text1: resp.data.message });
+    //         }
+    //     } catch (error) {
+    //         console.log('error in getCartCount', error);
+    //     }
+    //     setLoading(false);
+    // };
     return (
         <SafeAreaView style={{ backgroundColor: '#E8ECF2', flex: 1 }}>
 
@@ -238,8 +317,8 @@ const Schedule = (props) => {
                 justifyContent: 'center', flex: 1
             }}>
                 <View style={{ width: '100%', height: 45, position: 'absolute', backgroundColor: '#fff', zIndex: 999, top: 4 }} />
-
-                <EventCalendar
+                {console.log('my events--->>>', events)}
+                {/* <EventCalendar
                     eventTapped={eventClicked}
                     // Function on event press
                     events={events}
@@ -247,9 +326,9 @@ const Schedule = (props) => {
                     width={dimensions.SCREEN_WIDTH}
                     // Container width
                     size={60}
-                    renderEvent={(events) => {
-                        console.log('=================hhhh===================');
-                        console.log(events);
+                    renderEvent={(item) => {
+                        console.log('=================hhhh===================',);
+                        console.log(item);
                         console.log('====================================');
                         return (
 
@@ -274,7 +353,7 @@ const Schedule = (props) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.72, alignSelf: 'center' }}>
                                         <View style={styles.circleView}>
                                             <MyText
-                                                text={'CG'}
+                                                text={'LP'}
                                                 fontFamily="Roboto"
                                                 fontWeight='500'
                                                 fontSize={14}
@@ -285,7 +364,7 @@ const Schedule = (props) => {
 
                                         </View>
                                         <MyText
-                                            text={'Jane Doe (Admin)'}
+                                            text={'Dr. Elsie Koh, MD MHL'}
                                             fontFamily="Roboto"
                                             fontWeight='bold'
                                             fontSize={14}
@@ -295,7 +374,7 @@ const Schedule = (props) => {
                                         />
                                         <View style={styles.buttonBi}>
                                             <MyText
-                                                text={'Bi- Montly'}
+                                                text={events.meeting_type}
                                                 fontFamily="Roboto"
                                                 fontWeight='500'
                                                 fontSize={12}
@@ -312,7 +391,7 @@ const Schedule = (props) => {
                                     </View>
                                     <View style={{ marginHorizontal: 14 }}>
                                         <MyText
-                                            text={'Goal Setting & Achieving'}
+                                            text={events.meeting_title}
                                             fontFamily="Roboto"
                                             fontWeight='500'
                                             fontSize={14}
@@ -361,6 +440,164 @@ const Schedule = (props) => {
                                         />
                                     </View>
                                 </TouchableOpacity>
+
+                            </TouchableOpacity>
+
+                        )
+                    }}
+                    // number of date will render before and after initDate
+                    // (default is 30 will render 30 day before initDate
+                    // and 29 day after initDate)
+                    initDate={apiDate}
+                    // Show initial date (default is today)
+                    scrollToFirst
+                // Scroll to first event of the day (default true)
+                /> */}
+
+
+                <EventCalendar
+                    eventTapped={eventClicked}
+                    // Function on event press
+                    events={events}
+                    // Passing the Array of event
+                    width={dimensions.SCREEN_WIDTH}
+                    // Container width
+                    size={60}
+                    renderEvent={(data) => {
+                        console.log('=================hhhh===================');
+                        console.log(data);
+                        console.log('====================================');
+                        return (
+
+                            <TouchableOpacity style={{
+                                width: '98%', borderRadius: 4, alignSelf: 'center',
+                                backgroundColor: '#fff',
+                                shadowColor: '#000',
+                                shadowRadius: 2,
+                                shadowOpacity: 0.2,
+                                elevation: 3,
+                                paddingVertical: 10, marginTop: 9
+                            }} onPress={() => {
+                                props.navigation.navigate('ServiceDetails', { data: data, selectedDate: displaydate })
+                            }}>
+                                <TouchableOpacity style={{ width: '100%', alignSelf: 'center', }} onPress={() => {
+                                    props.navigation.navigate('ServiceDetails', { data: data, selectedDate: displaydate })
+                                }}>
+                                    {/* <Text style={{ color: '#000', fontWeight: '500', fontSize: 12, left: 15, marginTop: 10 }}>Service : {data.meeting_title}</Text>
+                                    <View style={{ width: '100%', height: 1, backgroundColor: '#E7EAF1', marginVertical: 7, }} /> */}
+
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.72, alignSelf: 'center' }}>
+                                        <View style={styles.circleView}>
+                                            <MyText
+                                                text={'LP'}
+                                                fontFamily="Roboto"
+                                                fontWeight='500'
+                                                fontSize={14}
+                                                textColor={Color.PRIMARY}
+                                                style={{ alignSelf: 'center' }}
+
+                                            />
+
+                                        </View>
+                                        <MyText
+                                            text={'Dr. Elsie Koh, MD MHL'}
+                                            fontFamily="Roboto"
+                                            fontWeight='bold'
+                                            fontSize={14}
+                                            textColor={Color.LIGHT_BLACK}
+                                            style={{ alignSelf: 'center' }}
+
+                                        />
+                                        <View style={styles.buttonBi}>
+                                            <MyText
+                                                text={data.meeting_type}
+                                                fontFamily="Roboto"
+                                                fontWeight='500'
+                                                fontSize={12}
+                                                textColor={Color.WHITE}
+                                                style={{ alignSelf: 'center' }}
+
+                                            />
+                                        </View>
+
+                                    </View>
+                                    <View style={{ width: dimensions.SCREEN_WIDTH, height: 1, backgroundColor: '#E7EAF1', marginVertical: 5 }}>
+
+                                    </View>
+                                    <View style={{ marginHorizontal: 14 }}>
+                                        <MyText
+                                            text={data.meeting_title}
+                                            fontFamily="Roboto"
+                                            fontWeight='500'
+                                            fontSize={14}
+                                            textColor={Color.LIGHT_BLACK}
+                                            style={{}}
+
+                                        />
+                                        <View style={{ flexDirection: 'row', marginVertical: 8 }}>
+                                            <SavedBook></SavedBook>
+                                            <MyText
+                                                text={'Module 3'}
+                                                fontFamily="Roboto"
+                                                fontWeight='400'
+                                                fontSize={13}
+                                                textColor={Color.LIGHT_BLACK}
+                                                style={{ marginHorizontal: 6 }}
+
+                                            />
+                                        </View>
+                                        <View style={{ flexDirection: 'row', }}>
+                                            <OnGoing></OnGoing>
+                                            <MyText
+                                                text={`${data.schedule_start_date},${data.schedule_start_time}`}
+                                                fontFamily="Roboto"
+                                                fontWeight='400'
+                                                fontSize={13}
+                                                textColor={Color.LIGHT_BLACK}
+                                                style={{ marginHorizontal: 6 }}
+
+                                            />
+                                        </View>
+                                    </View>
+                                    <View style={{ width: dimensions.SCREEN_WIDTH, height: 1, backgroundColor: '#E7EAF1', marginVertical: 7, }}>
+
+                                    </View>
+                                    <View style={{ marginHorizontal: 10, flexDirection: 'row' }}>
+                                        <Zoom height={22} ></Zoom>
+                                        <MyText
+                                            text={'Join Zoom Meeting'}
+                                            fontFamily="Roboto"
+                                            fontWeight='400'
+                                            fontSize={13}
+                                            textColor={'#3DA1E3'}
+                                            style={{}}
+
+                                        />
+                                    </View>
+
+
+                                </TouchableOpacity>
+
+
+
+
+
+                                {/*    <View style={{ width: '100%', height: 1, backgroundColor: '#E7EAF1',marginTop:10 }} />
+                    <View style={{ padding: 10,alignSelf:'center', }}>
+                    <TouchableOpacity style={{ width: 130, height: 30, borderRadius: 15, backgroundColor: '#fff',borderWidth:1,borderColor:"#7BC043", justifyContent: 'center', }}
+                        onPress={()=>{Linking.openURL('https://www.google.com/maps/dir/?api=1&destination=lat,long&dir_action=navigate')}}>
+                          <View style={{flexDirection:"row",justifyContent:"space-between",width:80,justifyContent:"center",alignSelf:"center"}}>
+                          <Image style={{ width: 17, height:17, resizeMode: 'stretch',right:5}} source={require('../../assets/images/Icons/route-square.png')} />
+                          <Text style={{ color: '#7BC043', fontWeight: '600', fontSize: 12, alignSelf: 'center' }}>Navigate</Text>
+                          </View>
+      
+                        </TouchableOpacity>
+                       <TouchableOpacity style={{ width: '48%', height: 30, borderRadius: 15, backgroundColor: COLORS.Primary_Green,borderWidth:1,borderColor:"#7BC043", justifyContent: 'center', }}
+                        onPress={()=>{Linking.openURL('https://www.google.com/maps/dir/?api=1&destination=lat,long&dir_action=navigate')}}>
+                          <Text style={{ color: '#fff', fontWeight: '600', fontSize: 11, alignSelf: 'center' }}>Check In {data.start_time}</Text>
+                        
+                        </TouchableOpacity> 
+                    </View>*/}
 
                             </TouchableOpacity>
 

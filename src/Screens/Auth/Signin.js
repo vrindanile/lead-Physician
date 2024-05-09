@@ -21,8 +21,6 @@ import eye from '../../Global/Images/eye.svg';
 import Call from '../../Global/Images/call.svg'
 import CustomHeader from '../../Components/CustomHeader';
 import { setUser, setUserToken } from '../../reduxToolkit/reducer/user';
-import Google from '../../Global/Images/googleIcon.svg';
-import Facebook from '../../Global/Images/facebookLogo.svg';
 import Logo from '../../Global/Images/logo.svg'
 const SignIn = ({ navigation }) => {
     const H = Dimensions.get('screen').height;
@@ -61,21 +59,19 @@ const SignIn = ({ navigation }) => {
                 password: password,
             };
             const { responseJson, err } = await requestPostApi(LOGIN, data, 'POST', '');
-            setLoading(false);
             console.log('login?????????', responseJson.authorization.token);
             if (responseJson.status === true) {
+
                 console.log('sign in jsonValue', responseJson.user);
                 await AsyncStorage.setItem('userToken', responseJson.authorization.token);
                 const jsonValue = JSON.stringify(responseJson.user);
                 console.log('sign in jsonValue', jsonValue);
                 await AsyncStorage.setItem('userInfo', jsonValue);
                 console.log('sign in --------nValue', responseJson.authorization.token);
-                // dispatch(setUserToken(responseJson.authorization.token));
                 dispatch(setUserToken(responseJson.authorization.token));
                 console.log('after dispath');
                 dispatch(setUser(responseJson.user));
-                console.log('sign in --------nlllllValue',);
-                // dispatch(setUser(resp.data.user));
+                setLoading(false)
                 navigation.dispatch(resetIndexGoToBottomTab);
             } else {
                 console.log('login????????? come in catck block', responseJson.message);

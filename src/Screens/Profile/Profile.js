@@ -3,60 +3,95 @@ import { Text, View, Image, ActivityIndicator, Button, TouchableOpacity, StyleSh
 import Color, { dimensions } from '../../Global/Color';
 import MyText from '../../Components/MyText/MyText';
 import { useSharedValue, useDerivedValue, withSpring } from 'react-native-reanimated';
+import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { styles } from './ProfileStyle';
 import MyHeader from '../../Components/MyHeader/MyHeader';
+import Loader from '../../Components/Loader';
 import AppIntroSlider from 'react-native-app-intro-slider';
-// import Spinner from 'react-native-spinkit';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-import Svg, { Circle, Rect } from 'react-native-svg';
-import Book from '../../Global/Images/book.svg'
-import Course from '../../Global/Images/courses.svg';
-import Ongoing from '../../Global/Images/clock.svg'
-import Pending from '../../Global/Images/timer.svg'
-import Completed from '../../Global/Images/completedCourse.svg'
-import Bat from '../../Global/Images/bat.svg'
-import Module from '../../Global/Images/moduleImg.svg'
-import Savedbook from '../../Global/Images/savedBook.svg'
-import VideoChat from '../../Global/Images/videoChat.svg'
-import Zoom from '../../Global/Images/Zoom.svg'
-import ProfilePic from '../../Global/Images/profile.svg'
+import { GET_PROFILE, postApiWithToken, LOGOUT, getApiWithToken } from '../../Global/Service';
+import { CommonActions } from '@react-navigation/core';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import { useIsFocused } from "@react-navigation/native";
 import ProfileCall from '../../Global/Images/callProfile.svg'
 import EmailProfile from '../../Global/Images/smsProfile.svg'
 import ArrowRigt from '../../Global/Images/Shape.svg'
-// import SvgUri from 'react-native-svg-uri';
-// import { useDispatch } from 'react-redux';
-// import { setUser, setUserToken, } from '../../../src/reduxToolkit/reducer/user';
-//src/reduxToolkit/reducer/user
-// import AsyncSStyleSheettorage from '@react-native-async-storage/async-storage';
-//import { useSelector, useDispatch } from 'react-redux';
-import KeySvg from '../../Global/Images/logo.svg';
+
+import { logOutUser } from '../../reduxToolkit/reducer/user';
 const Profile = ({ navigation }) => {
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState('')
+    const [profile, setProfile] = useState('')
+    const isFocus = useIsFocused()
+
+    ///my dispatch function
+    const gotoWelcome = () =>
+        CommonActions.reset({
+            index: 1,
+            routes: [{ name: 'SignIn' }],
+        });
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setLoading(true);
+            getCartCount()
+            setLoading(false);
+        });
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [isFocus]);
+    //get data for list
+    const getCartCount = async () => {
+        setLoading(true);
+        try {
+            const resp = await getApiWithToken(userToken, GET_PROFILE);
+            console.log('get profile2222----->>>>', resp?.data?.data?.first_name);
+            if (resp?.data?.success) {
+                setProfile(resp?.data?.data)
+
+            } else {
+                Toast.show({ text1: resp.data.message });
+            }
+        } catch (error) {
+            console.log('error in getCartCount', error);
+        }
+        setLoading(false);
+    };
+
+    // logout user
+    const logout = async () => {
+
+        console.log('does it reach to logout function');
+        setLoading(true);
+        try {
+            const resp = await postApiWithToken(
+                userToken,
+                LOGOUT,
+                {},
+            );
+            console.log('logout resp', resp?.data?.message);
+            if (resp?.data?.status) {
+                // closeDrawer();
+                navigation.dispatch(gotoWelcome);
+                Toast.show({ text1: resp?.data?.message });
+                dispatch(logOutUser());
+                await AsyncStorage.clear();
+            }
+        } catch (error) {
+            console.log('error in logout', error);
+        }
+        setLoading(false);
+    };
+    //variables : redux
+    const userToken = useSelector(state => state.user.userToken);
+
     const [animating, setAnimating] = useState(true);
     ;
     const [scrolling, setscrolling] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const scrollY = useSharedValue(0);
-    const renderNextButton = () => null;
-    const renderDoneButton = () => null;
 
-    const banner = [
-        {
-            id: '1',
-            text: 'Announcements',
-            title: 'Welcome to LEAD Physician®, the online leadership training program for Physicians By Physicians.'
-        },
-        {
-            id: '2',
-            text: 'Announcements',
-            title: 'Welcome to LEAD Physician®, the online leadership training program for Physicians By Physicians.'
-        },
-        {
-            id: '3',
-            text: 'Announcements',
-            title: 'Welcome to LEAD Physician®, the online leadership training program for Physicians By Physicians.'
-        }
-    ]
+
+
     const physicianCourse = [{
         id: '1',
         title: 'Change password',
@@ -78,12 +113,7 @@ const Profile = ({ navigation }) => {
 
     },
     ]
-    const schedule = [{
-        id: '1',
-        name: 'Jane Doe (Admin)',
-        module: 'Module 3',
-        time: '12 Mar, 09:30 Am'
-    }]
+
     const handleScroll = event => {
         const yOffset = event.nativeEvent.contentOffset.y;
         scrollY.value = event.nativeEvent.contentOffset.y;
@@ -101,73 +131,21 @@ const Profile = ({ navigation }) => {
             setRefreshing(false);
         });
     }, []);
-    const RenderItem = ({ item }) => {
 
-        return (
-            <>
 
-            </>
-        );
-    };
-    const RenderItemLead = ({ item }) => {
-        return (
-            <TouchableOpacity style={styles.teamView}>
-                <View style={styles.circularBackground}>
-                    <Bat style={{ alignSelf: 'center' }}></Bat>
-
-                </View>
-                <View style={{ marginTop: 28 }}>
-                    <MyText text={item.title} fontWeight='400' fontSize={14} textColor={Color.LIGHT_BLACK} fontFamily='Roboto' style={{ textAlign: 'center', }} />
-                    <View style={styles.statusView}>
-                        {item.status == 'Completed' ?
-                            <View style={styles.rowView}>
-                                <Completed style={{ alignSelf: 'center' }}></Completed>
-                                <MyText text={item.status} fontWeight='400' fontSize={12} textColor={Color.PRIMARY} fontFamily='Roboto' style={{ textAlign: 'center', marginHorizontal: 2 }} />
-                            </View> : item.status == 'Ongoing' ? <View style={styles.rowView}>
-                                <Ongoing style={{ alignSelf: 'center' }}></Ongoing>
-                                <MyText text={item.status} fontWeight='400' fontSize={12} textColor={Color.PRIMARY} fontFamily='Roboto' style={{ textAlign: 'center', marginHorizontal: 2 }} />
-                            </View> : <View style={styles.rowView}>
-                                <Pending style={{ alignSelf: 'center' }}></Pending>
-                                <MyText text={item.status} fontWeight='400' fontSize={12} textColor={Color.PRIMARY} fontFamily='Roboto' style={{ textAlign: 'center', marginHorizontal: 2 }} />
-                            </View>}
-                    </View>
-                </View>
-            </TouchableOpacity>
-        )
-    }
     //ui for schdule
     const RenderSchdule = ({ item }) => {
         return (
             <TouchableOpacity style={styles.scduleView} onPress={() => {
-                item.id === '1' ? navigation.navigate('ChangePassword') : null
+                item.id === '1' ? navigation.navigate('ChangePassword') : item.id === '4' ? logout() : null
             }}>
                 <View style={{ flexDirection: 'row', width: dimensions.SCREEN_WIDTH * 0.80, justifyContent: 'space-between' }}>
                     <MyText text={item.title} fontWeight='700' fontSize={14} textColor={'#132A3A'} fontFamily='Roboto' style={{ alignSelf: 'center' }} />
                     <ArrowRigt height={13} width={8}></ArrowRigt>
                 </View>
-
-
-
-
             </TouchableOpacity>
         )
     }
-    // useEffect(() => {
-    //     // getTheme();
-    //     setTimeout(() => {
-    //         setAnimating(false);
-
-    //         // Check if user_id is set or not
-    //         // If not then send for Authentication
-    //         // else send to Home Screen
-    //           AsyncStorage.getItem('user_id').then(value =>
-    //             navigation.replace(value !== null ? 'RegisterScreen' : 'MainContainer'),
-    //           );
-    //         navigation.replace('WelcomeScreen')
-    //     }, 5000);
-    // }, []);
-
-
     return (
 
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F7FAEB' }}>
@@ -205,8 +183,17 @@ const Profile = ({ navigation }) => {
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.80, alignSelf: 'center', paddingVertical: 14 }}>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <ProfilePic height={64} width={64}></ProfilePic>
-                                    <MyText text='Katty Parrie' fontWeight='bold' fontSize={16} textColor={'#4F5168'} fontFamily='Roboto' style={{ marginHorizontal: 12, marginVertical: 18 }} />
+                                    {/* <ProfilePic height={64} width={64}></ProfilePic> */}
+                                    {console.log('my profilre image--->>', profile?.profile_image)}
+                                    <Image
+                                        source={
+                                            profile?.profile_image
+                                                ? { uri: profile?.profile_image }
+                                                : require('../../Global/Images/user-default.png')
+                                        }
+                                        style={{ height: 64, width: 64, borderRadius: 50 }}
+                                    />
+                                    <MyText text={`${profile.first_name} ${profile.last_name}`} fontWeight='bold' fontSize={16} textColor={'#4F5168'} fontFamily='Roboto' style={{ marginHorizontal: 12, marginVertical: 18 }} />
                                 </View>
                                 <TouchableOpacity style={{
                                     width: 66, height: 34,
@@ -221,11 +208,11 @@ const Profile = ({ navigation }) => {
                                 <View style={{ flexDirection: 'row', width: dimensions.SCREEN_WIDTH * 0.80, alignSelf: 'center', justifyContent: 'space-between' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'center', marginVertical: 12 }}>
                                         <ProfileCall height={25} width={25}></ProfileCall>
-                                        <MyText text='+1 8763939993' fontWeight='400' fontSize={14} textColor={'#66757F'} fontFamily='Roboto' style={{ marginHorizontal: 5, }} />
+                                        <MyText text={profile?.phone} fontWeight='400' fontSize={14} textColor={'#66757F'} fontFamily='Roboto' style={{ marginHorizontal: 5, }} />
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'center', marginVertical: 12 }}>
                                         <EmailProfile height={25} width={25}></EmailProfile>
-                                        <MyText text='Katty@gmail.com' fontWeight='400' fontSize={14} textColor={'#66757F'} fontFamily='Roboto' style={{ marginHorizontal: 5, marginVertical: 3 }} />
+                                        <MyText text={profile?.email} fontWeight='400' fontSize={14} textColor={'#66757F'} fontFamily='Roboto' style={{ marginHorizontal: 5, marginVertical: 3 }} />
                                     </View>
                                 </View>
                             </View>
@@ -290,6 +277,7 @@ const Profile = ({ navigation }) => {
 
 
             </View>
+            {loading ? <Loader /> : null}
         </SafeAreaView>
     )
 }

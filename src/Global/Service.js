@@ -16,6 +16,11 @@ export const REGISTER = `register`;
 export const SET_GOAL = `goal`
 export const GET_GOAL = `get-goal`
 export const DELETE_GOAL = `delete-goal`
+export const GOAL_DETAIL = `goal-details`
+export const GOAL_UPDATE = `update-goal`
+export const GET_PROFILE = `profile`
+export const GET_SCHDULE = `get-schedule`
+export const LOGOUT = `logout`
 
 
 export const HOME = `home`;
@@ -31,7 +36,7 @@ export const VERIFY_OTP = `verify-otp`;
 export const RESEND_OTP = `resend-otp`;
 export const FORGET_PASSWORD = `forget-password`;
 export const FORGET_PASSWORD_VERIFY = `forget-password-verify`;
-export const LOGOUT = `logout`;
+
 export const ALL_TYPE_LISTING = `all-type-listing`;
 export const LIKE_OBJECT_TYPE = `add-wishlist`;
 export const UNLIKE_OBJECT_TYPE = `remove-wishlist`;

@@ -91,7 +91,10 @@ const MyHeader = ({
         if (hrs >= 16) msg = 'Good Evening,';
         setGreetingMsg(msg);
     };
-
+    const userToken = useSelector(state => state.user.userToken);
+    console.log('my userToken in header-->>', userToken);
+    const userInfo = useSelector(state => state.user.userInfo)
+    console.log('my userInfo from header-->>', userInfo);
     // const resetIndexGoToWelcome = CommonActions.reset({
     //     index: 1,
     //     routes: [{ name: ScreenNames.WELCOME }],
@@ -127,16 +130,7 @@ const MyHeader = ({
 
                 ) : (
                     <View style={styles.leftContainer}>
-                        {/* <Image
-                            resizeMode="contain"
-                            source={
-                                userInfo?.profile_image
-                                    ? { uri: userInfo?.profile_image }
-                                    : require('assets/images/user-default.png')
-                            }
-                            
-                            style={styles.personImg}
-                        /> */}
+
                         <DrawerIcon></DrawerIcon>
 
                     </View>
@@ -163,7 +157,17 @@ const MyHeader = ({
                 </View>
             ) : <>
                 <View style={{ flexDirection: 'row', width: dimensions.SCREEN_WIDTH * 0.60 }}>
-                    <Profile height={43} width={43}></Profile>
+                    {console.log('userInfo?.profile_image', userInfo?.profile_image)}
+                    <Image
+                        resizeMode="contain"
+                        source={
+                            userInfo?.profile_image
+                                ? { uri: userInfo?.profile_image }
+                                : require('../../Global/Images/user-default.png')
+                        }
+
+                        style={styles.personImg}
+                    />
                     <View style={{ marginLeft: 10 }}>
                         <MyText
                             // text={'Good Afternoon,'}
@@ -175,8 +179,8 @@ const MyHeader = ({
                             fontWeight={'normal'}
                         />
                         <MyText
-                            // text={`${userInfo?.first_name} ${userInfo?.last_name}`}
-                            text={`Katty Parrie`}
+                            text={`${userInfo?.first_name} ${userInfo?.last_name}`}
+
                             fontFamily="Roboto"
                             fontSize={20}
                             textColor={Color.PRIMARY}
@@ -189,54 +193,55 @@ const MyHeader = ({
                 </View>
             </>}
             {/* notification or cart icon  */}
+            {!isBackButton ? (
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
 
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
 
+                    }}>
+                    {IsCartIcon ? (
+                        <TouchableOpacity onPress={() => { }}
 
-                }}>
-                {IsCartIcon ? (
-                    <TouchableOpacity onPress={() => { }}
+                            // {gotoCart}
 
-                        // {gotoCart}
-
-                        style={{ marginRight: 10 }}
-                    >
-                        {/* {cartCount != 0 ? (
+                            style={{ marginRight: 10 }}
+                        >
+                            {/* {cartCount != 0 ? (
               <View style={styles.cartNumView}>
                 <MyText text={cartCount} fontSize={10} textColor="white" />
               </View>
             ) : null} */}
-                        <Cart></Cart>
-                        {/* <Image source={require('assets/images/cart.png')} /> */}
-                    </TouchableOpacity>
-                ) : null}
-                {IsNotificationIcon ? (
-                    <TouchableOpacity
-                        // onPress={gotoNotification}
-                        onPress={() => { navigation.navigate('Notification') }}
-                    >
-                        {/* {userNotifications ? (
+                            <Cart></Cart>
+                            {/* <Image source={require('assets/images/cart.png')} /> */}
+                        </TouchableOpacity>
+                    ) : null}
+                    {IsNotificationIcon ? (
+                        <TouchableOpacity
+                            // onPress={gotoNotification}
+                            onPress={() => { navigation.navigate('Notification') }}
+                        >
+                            {/* {userNotifications ? (
                             <View style={styles.numNotiView}
                             
                             > */}
-                        {/* <MyText
+                            {/* <MyText
                   text={userNotifications}
                   fontSize={10}
                   textColor="white"
                 /> */}
-                        {/* </View> */}
-                        {/* ) : null} */}
-                        {/* <MyText text={userNotifications} fontSize={16} textColor="white" style={{position:"absolute", bottom:24, right:5, fontWeight:'bold'}}/> */}
-                        {/* <MyIcon.Feather name="bell" size={24} color={Colors.WHITE} /> */}
-                        <Notfication></Notfication>
-                        {/* <Image source={require('assets/images/notification.png')} /> */}
-                    </TouchableOpacity>
-                ) : null}
+                            {/* </View> */}
+                            {/* ) : null} */}
+                            {/* <MyText text={userNotifications} fontSize={16} textColor="white" style={{position:"absolute", bottom:24, right:5, fontWeight:'bold'}}/> */}
+                            {/* <MyIcon.Feather name="bell" size={24} color={Colors.WHITE} /> */}
+                            <Notfication></Notfication>
+                            {/* <Image source={require('assets/images/notification.png')} /> */}
+                        </TouchableOpacity>
+                    ) : null}
 
-            </View>
+                </View>) : <View>
+            </View>}
         </Animated.View>
     );
 };

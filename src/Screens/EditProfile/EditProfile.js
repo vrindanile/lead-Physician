@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, ActivityIndicator, tyleSheet, Button, TouchableOpacity, StyleSheet, Dimensions, TextInput, ScrollView, SafeAreaView, KeyboardAvoidingView, ImageBackground, PermissionsAndroid, } from 'react-native'
-import { requestPostApi, REGISTER, postAPI } from '../../Global/Service'
+import { requestPostApi, REGISTER, postAPI, getApiWithToken, GET_PROFILE, PROFILE } from '../../Global/Service'
 import { useDispatch } from 'react-redux';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Toast from 'react-native-toast-message';
@@ -23,8 +23,11 @@ import Call from '../../Global/Images/call.svg'
 import CustomHeader from '../../Components/CustomHeader';
 import MyHeader from '../../Components/MyHeader/MyHeader';
 import Google from '../../Global/Images/googleIcon.svg';
+import { connect, useSelector } from 'react-redux';
+import { setUser } from '../../reduxToolkit/reducer/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Facebook from '../../Global/Images/facebookLogo.svg'
-
+import { useIsFocused } from "@react-navigation/native";
 const EditProfile = ({ navigation }) => {
     const H = Dimensions.get('screen').height;
     const W = Dimensions.get('screen').width;
@@ -45,29 +48,52 @@ const EditProfile = ({ navigation }) => {
     const [My_Alert, setMy_Alert] = useState(false)
     const [alert_sms, setalert_sms] = useState('')
     const [filePath, setFilePath] = useState('');
+    const [profile, setProfile] = useState('')
+    const [isimageChange, setisimageChange] = useState(false);
     const [showImageSourceModal, setShowImageSourceModal] = useState(false);
+    const isFocus = useIsFocused()
     const resetIndexGoToBottomTab = CommonActions.reset({
         index: 1,
-        routes: [{ name: 'SignIn' }],
+        routes: [{ name: 'Profile' }],
     });
+    //variables : redux
+    const userToken = useSelector(state => state.user.userToken);
+    const user = useSelector(state => state.user.userInfo);
+    console.log(user.id, 'mu user')
+    //
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setLoading(true);
+            getCartCount()
+            setLoading(false);
+        });
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [isFocus]);
     const Validation = () => {
         if (String(fullname).trim().length == 0) {
-            Toast.show({ text1: 'Please enter Name' });
+            Toast.show({ type: 'error', text1: 'Please enter First Name' });
             return false;
-        } else if (emailid == '') {
-            Toast.show({ text1: 'Please enter Email Address' });
+        } else if (lastName == '') {
+            Toast.show({ type: 'error', text1: 'Please enter Last Name' });
             return false;
         }
+
         else if (phoneno == '') {
-            Toast.show({ text1: 'Please enter Phone Number' });
-            return false;
-        } else if (password == '' || password.length <= 8) {
-            Toast.show({ text1: 'Please enter minimum 8 characters' });
-            return false;
-        } else if (password == '') {
-            Toast.show({ text1: 'Please enter Password' });
+            console.log('my phoneo legth-->>', phoneno);
+            Toast.show({ type: 'error', text1: 'Please enter Phone Number' });
             return false;
         }
+
+        // else if (phoneno.length !== 10) {
+        //     console.log('my phoneo legth-->>', phoneno.length);
+        //     Toast.show({ type: 'error', text1: 'Please enter valid Phone Number' });
+        //     return false;
+        // }
+        // else if (filePath == '') {
+        //     Toast.show({ type: 'error', text1: 'Please upload Profile Image', });
+        //     return false;
+        // }
         return true;
     };
     //function : imp function
@@ -102,6 +128,7 @@ const EditProfile = ({ navigation }) => {
             console.log('Response = ', response.assets[0]);
             setFilePath(response.assets[0]);
             setShowImageSourceModal(false);
+            setisimageChange(true)
         });
     };
     //function : imp function
@@ -171,45 +198,57 @@ const EditProfile = ({ navigation }) => {
             } else {
                 setFilePath(response.assets[0]);
                 setShowImageSourceModal(false);
+                setisimageChange(true)
             }
             setShowImageSourceModal(false);
         });
     };
+
     const signUpUser = async () => {
+        console.log('did it come into the functinnnn');
         if (!Validation()) {
             return;
         }
-
-
-
+        var url = PROFILE
+        var murl = `/` + user.id
+        url = url + murl
+        console.log('my url for the edit-->>', url);
         try {
             const formaData = new FormData();
-            const imageName = filePath?.uri?.slice(
-                filePath?.uri?.lastIndexOf('/'),
-                filePath?.uri?.length,
-            );
-            formaData.append('profile_image', {
-                name: imageName,
-                type: filePath?.type,
-                uri: filePath?.uri,
-            });
+            console.log('my filePAth--->>', filePath.length);
+            if (filePath.length != 0) {
+                const imageName = filePath?.uri?.slice(
+                    filePath?.uri?.lastIndexOf('/'),
+                    filePath?.uri?.length,
+                );
+                formaData.append('profile_image', {
+                    name: imageName,
+                    type: filePath?.type,
+                    uri: filePath?.uri,
+                });
+            }
             formaData.append('first_name', fullname);
-            formaData.append('last_name', 'iiii');
+            formaData.append('last_name', lastName);
             formaData.append('email', emailid);
             formaData.append('phone', phoneno);
-            formaData.append('password', password);
+            // formaData.append('password', password);
             setLoading(true);
 
             setLoading(true);
             console.log('my uiuiui--->>', formaData)
 
-            const resp = await postAPI(REGISTER, formaData);
-            console.log('my respinseee--->>', resp.status === true);
+            const resp = await postAPI(url
+                , formaData, userToken);
+            console.log('my respinseee--->>', resp.response);
             if (resp.status === true) {
                 // Handle successful response
                 Toast.show({ text1: resp.response.message });
                 console.log('my response for signup?????--->>', resp)
-                navigation.dispatch(resetIndexGoToBottomTab);
+                const jsonValue = JSON.stringify(resp.response.data);
+                console.log('my repsonse value-->>,', jsonValue);
+                AsyncStorage.setItem('userInfo', jsonValue);
+                dispatch(setUser(resp?.response?.data));
+                navigation.goBack()
             } else {
                 console.log('my response for signup?????--->>', resp)
                 Toast.show({ text1: resp.response.message });
@@ -221,6 +260,45 @@ const EditProfile = ({ navigation }) => {
         }
         setLoading(false);
     };
+    //get profile data
+    const getCartCount = async () => {
+
+        try {
+            setLoading(true);
+            const resp = await getApiWithToken(userToken, GET_PROFILE);
+            if (resp?.data?.success) {
+                setProfile(resp?.data?.data?.profile_image)
+                setFullname(resp?.data?.data?.first_name)
+                setLastName(resp?.data?.data?.last_name)
+                setEmailid(resp?.data?.data?.email)
+                setPhoneno(resp?.data?.data?.phone)
+                setPassword(resp?.data?.data?.password)
+                setLoading(false);
+            } else {
+                Toast.show({ text1: resp.data.message });
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log('error in getCartCount', error);
+        }
+        setLoading(false);
+    };
+    //format phone number
+    const formatPhoneNumber = (number) => {
+        // Remove any non-numeric characters
+        const cleanedNumber = number.replace(/[^\d]/g, '');
+
+        // Apply US phone number format
+        const formattedNumber = cleanedNumber.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+
+        return formattedNumber;
+    };
+
+    const handleChange = (value) => {
+        console.log('my handel name---->>>', value);
+        setPhoneno(formatPhoneNumber(value));
+    };
+
     return (
 
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -241,7 +319,7 @@ const EditProfile = ({ navigation }) => {
                         setShowImageSourceModal(true);
                     }}
                 >
-                    {filePath == '' ? (
+                    {/* {filePath == '' ? (
                         <Image source={require('../../Global/Images/userDefault.png')} style={{ height: 150, width: 150, borderRadius: 100 }} />
                     ) : (
                         <Image
@@ -250,7 +328,19 @@ const EditProfile = ({ navigation }) => {
                             source={{ uri: filePath.uri }}
                             style={{ height: 150, width: 150, borderRadius: 100 }}
                         />
-                    )}
+                    )} */}
+                    <Image source={
+                        isimageChange ?
+                            {
+                                uri: filePath.uri,
+                            } :
+                            profile != null ? { uri: profile }
+                                :
+                                require('../../Global/Images/userDefault.png')
+                    }
+
+
+                        style={{ width: 150, height: 150, borderRadius: 100 }} />
                     <Image source={require('../../Global/Images/camera.png')} style={{ height: 20, width: 20, position: 'absolute', bottom: 12, right: 130 }} />
                 </TouchableOpacity>
 
@@ -287,28 +377,58 @@ const EditProfile = ({ navigation }) => {
 
                     </View>
                     <View style={{ marginTop: 12 }}>
-                        <CustomTextBox
+                        <View style={{
+                            height: 64,
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            borderRadius: 5,
+
+                            flexDirection: 'row',
+                            justifyContent: "center",
+                            alignItems: "center",
+                            paddingHorizontal: 10,
+                            alignSelf: 'center',
+                            borderWidth: 1,
+                            height: 64,
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            borderRadius: 5,
+                            width: '100%',
+                            flexDirection: 'row',
+                            justifyContent: "space-between",
+                            paddingHorizontal: 10,
+                            borderWidth: 1,
+                            borderColor: '#959FA6',
+                            paddingRight: 40
+                        }}>
+                            <EmailSvg width={24} height={24} />
+                            <Text style={{ width: '90%', }}>{emailid}</Text>
+                        </View>
+                        {/* <CustomTextBox
                             imageComponent={<EmailSvg width={24} height={24} />}
                             //  placeholder='Email address'
                             value={emailid}
-                            onChangeText={(text) => {
-                                setEmailid(text)
-                            }}
+                            // onChangeText={(text) => {
+                            //     setEmailid(text)
+                            // }}
                             placeholder={'Email Address'}
                         >
-                        </CustomTextBox></View>
+                        </CustomTextBox> */}
+
+                    </View>
                     <View style={{ marginTop: 12 }}>
                         <CustomTextBox
                             imageComponent={<Call width={24} height={24} />}
                             //  placeholder='Email address'
                             value={phoneno}
-                            onChangeText={(text) => {
-                                setPhoneno(text)
-                            }}
+                            // onChangeText={(text) => {
+                            //     setPhoneno(text)
+                            // }}
+                            onChangeText={handleChange}
                             placeholder={'Phone'}
                         >
                         </CustomTextBox></View>
-                    <View style={{ marginTop: 12 }}>
+                    {/* <View style={{ marginTop: 12 }}>
                         <CustomTextBox
                             imageComponent={< Lock
                                 width={24} height={24} />}
@@ -322,11 +442,11 @@ const EditProfile = ({ navigation }) => {
                             placeholderTextColor='black'
 
                         >
-                        </CustomTextBox></View>
+                        </CustomTextBox></View> */}
                     <TouchableOpacity onPress={() => {
-                        navigation.goBack('')
+                        // navigation.goBack('')
 
-                        // signUpUser()
+                        signUpUser()
                     }} style={{ marginTop: 20 }}>
                         <CustomButtonBlue name="Save"></CustomButtonBlue>
                     </TouchableOpacity>

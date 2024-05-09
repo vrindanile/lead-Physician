@@ -16,6 +16,8 @@ import {
     StatusBar,
     RefreshControl
 } from 'react-native';
+import { useIsFocused } from "@react-navigation/native";
+
 import moment from 'moment';
 import { dimensions } from '../../Global/Color';
 import SearchWithIcon from '../../Components/SearchWithIcon/SearchWithIcon';
@@ -74,23 +76,31 @@ const physicianCourse = [{
 const GoalsList = ({ navigation }) => {
     //variables
     const LINE_HEIGTH = 25;
+    const isFocus = useIsFocused()
     //variables : redux
     const userToken = useSelector(state => state.user.userToken);
 
     const [loading, setLoading] = useState('')
     const [goal, SetGoal] = useState([])
     const [refreshing, setRefreshing] = useState(false);
-    useEffect(() => {
-        getCartCount()
-    }, []);
+
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setLoading(true);
+            getCartCount()
+            setLoading(false);
+        });
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [isFocus]);
     const checkcon = () => {
-        // getCategories();
+        getCartCount();
     };
     const wait = timeout => {
         return new Promise(resolve => setTimeout(resolve, timeout));
     };
     const onRefresh = React.useCallback(() => {
-        // checkcon();
+        checkcon();
         wait(2000).then(() => {
             setRefreshing(false);
         });
@@ -164,7 +174,9 @@ const GoalsList = ({ navigation }) => {
                             }}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.actionButtonView, { backgroundColor: Color.PRIMARY, marginLeft: -5 }]} onPress={() => { navigation.navigate('ModuleScreen') }}>
+
+                    <TouchableOpacity style={[styles.actionButtonView, { backgroundColor: Color.PRIMARY, marginLeft: -5 }]} onPress={() => { navigation.navigate('EditGoal', { id: item.id }) }}>
+
                         <Resume></Resume>
                         <MyText
                             text={'Edit'}

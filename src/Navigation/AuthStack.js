@@ -30,6 +30,9 @@ import Notification from '../Notification/Notification';
 import SetGoal from '../Screens/SetGoal/SetGoal';
 import ModuleListing from '../ModuleListing/ModuleListing';
 import GoalsList from '../Screens/GoalsList/GoalsList';
+import EditGoal from '../EditGoal/EditGoal';
+import ChatDetail from '../Screens/ChatDetail/ChatDetail';
+import ChatSection from '../Components/Chat/ChatSection';
 const Stack = createNativeStackNavigator();
 const AuthStack = () => {
     return (
@@ -56,6 +59,9 @@ const AuthStack = () => {
             <Stack.Screen name="SetGoal" component={SetGoal} />
             <Stack.Screen name="ModuleListing" component={ModuleListing} />
             <Stack.Screen name="GoalsList" component={GoalsList} />
+            <Stack.Screen name="EditGoal" component={EditGoal} />
+            <Stack.Screen name="ChatDetail" component={ChatDetail} />
+            <Stack.Screen name="ChatSection" component={ChatSection} />
 
         </Stack.Navigator>
     );

@@ -51,7 +51,7 @@
 
 import React from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
-import Color from '../global/Color';
+import Color from '../Global/Color';
 import MyText from './MyText/MyText';
 const Header = ({ navigation, leftImage, rightImage, title, isLogoImage }) => {
   const handleBack = () => {
