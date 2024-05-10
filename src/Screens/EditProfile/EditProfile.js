@@ -85,11 +85,11 @@ const EditProfile = ({ navigation }) => {
             return false;
         }
 
-        // else if (phoneno.length !== 10) {
-        //     console.log('my phoneo legth-->>', phoneno.length);
-        //     Toast.show({ type: 'error', text1: 'Please enter valid Phone Number' });
-        //     return false;
-        // }
+        else if (phoneno.length != 14) {
+            console.log('my phoneo legth-->>', phoneno.length);
+            Toast.show({ type: 'error', text1: 'Please enter valid Phone Number' });
+            return false;
+        }
         // else if (filePath == '') {
         //     Toast.show({ type: 'error', text1: 'Please upload Profile Image', });
         //     return false;
@@ -285,6 +285,7 @@ const EditProfile = ({ navigation }) => {
     };
     //format phone number
     const formatPhoneNumber = (number) => {
+        console.log('');
         // Remove any non-numeric characters
         const cleanedNumber = number.replace(/[^\d]/g, '');
 
@@ -293,6 +294,25 @@ const EditProfile = ({ navigation }) => {
 
         return formattedNumber;
     };
+    // const formatPhoneNumber = (number) => {
+    //     // Remove any non-numeric characters
+    //     const cleanedNumber = number.replace(/[^\d]/g, '');
+
+    //     // Take only the first 10 digits
+    //     const truncatedNumber = cleanedNumber.slice(0, 10);
+
+    //     // If the number is less than 10 digits, return empty string
+    //     if (truncatedNumber.length < 10) {
+    //         console.log('my length of truncated--->>', truncatedNumber.length
+    //         );
+    //         return '';
+    //     }
+
+    //     // Apply US phone number format
+    //     const formattedNumber = truncatedNumber.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+
+    //     return formattedNumber;
+    // };
 
     const handleChange = (value) => {
         console.log('my handel name---->>>', value);

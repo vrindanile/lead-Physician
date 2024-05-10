@@ -89,7 +89,7 @@ const Signup = ({ navigation }) => {
             return false;
         }
 
-        else if (phoneno.length <= 10) {
+        else if (phoneno.length != 14) {
             Toast.show({ type: 'error', text1: 'Please enter valid Phone Number' });
             return false;
         }

@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, ActivityIndicator, tyleSheet, Button, TouchableOpacity, StyleSheet, Dimensions, TextInput, ScrollView, SafeAreaView, KeyboardAvoidingView, ImageBackground, PermissionsAndroid, } from 'react-native'
-import { requestPostApi, REGISTER, postAPI } from '../../Global/Service'
-import { connect, useDispatch } from 'react-redux';
+// import { requestPostApi, REGISTER, postAPI, CHANGE_PASSWORD } from '../../Global/Service'
+
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import MyText from '../../Components/MyText/MyText';
 import Toast from 'react-native-toast-message';
@@ -15,6 +15,8 @@ import Color from '../../Global/Color';
 import { dimensions } from '../../Global/Color';
 import SelectImageSource from '../../Modals/SelectImageSource';
 import { CommonActions } from '@react-navigation/native';
+import { GET_PROFILE, postApiWithToken, LOGOUT, getApiWithToken, CHANGE_PASSWORD, postApi, requestPostApi } from '../../Global/Service';
+import { connect, useSelector, useDispatch } from 'react-redux';
 // svg image
 import Lock from '../../Global/Images/lock.svg';
 import Profile from '../../Global/Images/profileCircle.svg';
@@ -27,6 +29,7 @@ import Google from '../../Global/Images/googleIcon.svg';
 import Facebook from '../../Global/Images/facebookLogo.svg'
 
 const ChangePassword = ({ navigation }) => {
+    const userToken = useSelector(state => state.user.userToken);
     const H = Dimensions.get('screen').height;
     const W = Dimensions.get('screen').width;
     const dispatch = useDispatch();
@@ -60,10 +63,10 @@ const ChangePassword = ({ navigation }) => {
             Toast.show({ type: 'error', text1: 'Please enter Old Password' });
             return false;
         }
-        else if (!regex.test(oldPassword)) {
-            Toast.show({ type: 'error', text1: 'Old Password must has at least eight characters that include 1 lowercase character, 1 uppercase character, 1 number, and at least one special character.', })
-            return false;
-        }
+        // else if (!regex.test(oldPassword)) {
+        //     Toast.show({ type: 'error', text1: 'Old Password must has at least eight characters that include 1 lowercase character, 1 uppercase character, 1 number, and at least one special character.', })
+        //     return false;
+        // }
         else if (password?.trim()?.length === 0) {
             Toast.show({ type: 'error', text1: 'Please enter New Password' });
             return false;
@@ -83,6 +86,31 @@ const ChangePassword = ({ navigation }) => {
 
     };
 
+    //api for change password
+    const changePassword = async () => {
+        if (!Validation()) {
+            return
+        }
+        setLoading(true);
+        try {
+            var data = {
+                current_password: oldPassword,
+                new_password: password
+            }
+            const { responseJson, err } = await requestPostApi(CHANGE_PASSWORD, data, 'POST', userToken);
+            console.log('login?????????', responseJson.status);
+            if (responseJson.status === true) {
+                Toast.show({ text1: responseJson.message });
+                navigation.goBack()
+                // gotoLogin();
+            } else {
+                Toast.show({ type: 'error', text1: responseJson.message });
+            }
+        } catch (error) {
+            console.log('error in changePassword', error);
+        }
+        setLoading(false);
+    };
     const signUpUser = async () => {
         if (!Validation()) {
             return
@@ -216,7 +244,7 @@ const ChangePassword = ({ navigation }) => {
                     <TouchableOpacity onPress={() => {
                         // navigation.goBack('')
 
-                        signUpUser()
+                        changePassword()
                     }} style={{ marginTop: 20 }}>
                         <CustomButtonBlue name="Save"></CustomButtonBlue>
                     </TouchableOpacity>

@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: 10,
         alignSelf: 'center',
-        borderWidth: 1
+        borderWidth: 1,
+        color: 'black'
     },
     text: { height: 40, color: '#292929', width: '90%' },
     togglePassword: {

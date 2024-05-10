@@ -10,6 +10,7 @@ import { Calendar } from 'react-native-calendars';
 // import Spinner from 'react-native-spinkit';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Circle, Rect } from 'react-native-svg';
+import Arrow from '../../Global/Images/arrowRight.svg'
 import Book from '../../Global/Images/book.svg'
 import Course from '../../Global/Images/courses.svg';
 import Ongoing from '../../Global/Images/clock.svg'
@@ -315,8 +316,21 @@ const Home = ({ navigation }) => {
                             <MyText text={'Resume'} fontWeight='500' fontSize={14} textColor={Color.WHITE} fontFamily='Roboto' style={{ alignSelf: 'center' }} />
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={styles.goalBar} onPress={() => { navigation.navigate('SetGoal') }}>
-
+                    <TouchableOpacity style={[styles.goalBar, { justifyContent: 'space-between', paddingHorizontal: 20 }]} onPress={() => { navigation.navigate('SetGoal') }}>
+                        <MyText
+                            text={'Set Your Goal'}
+                            fontWeight="bold"
+                            fontSize={16}
+                            textColor={Color.WHITE}
+                            fontFamily="Inter"
+                            style={{ alignSelf: 'center', justifyContent: 'center', textAlign: 'center' }}
+                        />
+                        <TouchableOpacity style={{
+                            width: 44, height: 44,
+                            borderRadius: 5, backgroundColor: Color.PRIMARY, justifyContent: 'center', alignItems: 'center', marginTop: 12,
+                        }}>
+                            <Arrow></Arrow>
+                        </TouchableOpacity>
                     </TouchableOpacity>
                     <Calendar
                         style={{

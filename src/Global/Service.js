@@ -21,6 +21,7 @@ export const GOAL_UPDATE = `update-goal`
 export const GET_PROFILE = `profile`
 export const GET_SCHDULE = `get-schedule`
 export const LOGOUT = `logout`
+export const CHANGE_PASSWORD = `change-password`
 
 
 export const HOME = `home`;
@@ -47,7 +48,7 @@ export const DELETE_CARD = `delete-card`;
 export const SAVE_CARD_LISTING = `save-card-listing`;
 export const NOTIFICATIONS = `notifications`;
 export const CLEAR_NOTIFICATIONS = `clear-notifications`;
-export const CHANGE_PASSWORD = `change-password`;
+export const CHANGE_PASWORD = `change-password`;
 export const CERTIFICATES = `certificates`;
 export const SUBMIT_REVIEW = `submit-review`;
 export const REVIEW_LIST = `review-list`;

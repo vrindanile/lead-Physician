@@ -36,7 +36,7 @@ const SignIn = ({ navigation }) => {
     const [fullname, setFullname] = useState('')
     const [emailid, setEmailid] = useState('ssuser@gmail.com')
     const [phoneno, setPhoneno] = useState('')
-    const [password, setPassword] = useState('123456789')
+    const [password, setPassword] = useState('Ssuser@123')
     const [loading, setLoading] = useState('')
     const [My_Alert, setMy_Alert] = useState(false)
     const [alert_sms, setalert_sms] = useState('')

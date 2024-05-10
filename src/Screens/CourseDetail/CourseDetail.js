@@ -856,7 +856,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                             toggleModal={toggleModal}
                             videoDetail={{
                                 ...showModal?.data,
-                                url: showModal?.data?.introduction_video,
+                                url: 'https://niletechinnovations.com/projects/trackcert/public/upload/disclaimers-introduction/1709727524.mp4',
                             }}
                         // {...props}
                         />
