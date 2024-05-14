@@ -22,6 +22,7 @@ import {
 //import : custom components
 import MyHeader from '../../Components/MyHeader/MyHeader';
 import MyText from '../../Components/MyText/MyText';
+import Loader from '../../Components/Loader';
 import CustomLoader from '../../Components/CustomLoader/CustomLoader';
 //import : third parties
 
@@ -31,8 +32,12 @@ import Color, { dimensions } from '../../Global/Color';
 import { Service } from '../../../global/Index';
 //import : styles
 import { styles } from './CourseDetailStyle';
+import { useIsFocused } from "@react-navigation/native";
+//import api
+import { GET_PROFILE, postApiWithToken, LOGOUT, getApiWithToken, GET_MYCOURSES, GET_COURSEDETAIL } from '../../Global/Service';
 //import : modal
 //import : redux
+import { connect, useSelector, useDispatch } from 'react-redux';
 // import { connect, useSelector } from 'react-redux';
 // import { width, height } from 'global/Constant';
 // import Divider from 'components/Divider/Divider';
@@ -137,11 +142,17 @@ const data = [{
 },
 ]
 const addToCartObject = {};
-const CourseDetail = ({ navigation, dispatch, route }) => {
+const CourseDetail = ({ navigation, route }) => {
+
+    console.log('my course detail roue-->>', route?.params?.id);
     // const defaultImgPath = Image.resolveAssetSource(defaultImg).uri;
+    //variables
+    const dispatch = useDispatch();
     //variables
     const LINE_HEIGTH = 25;
     //variables : redux
+    const userToken = useSelector(state => state.user.userToken);
+
     // const userToken = useSelector(state => state.user.userToken);
     // const userInfo = useSelector(state => state.user.userInfo);
     // const [showLoader, setShowLoader] = useState(false);
@@ -157,8 +168,11 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
     // const [showNotPurchasedModal, setShowNotPurchasedModal] = useState(false);
     // const [showViewPdfModal, setShowViewPdfModal] = useState(false);
     // const [pdfLink, setPdfLink] = useState('');
+    const isFocus = useIsFocused()
     const [refreshing, setRefreshing] = useState(false);
     const [showModal, setShowModal] = useState({ isVisible: false, data: null });
+    const [loading, setLoading] = useState('')
+    const [myCoursesDetail, setMyCoursesDetail] = useState({})
     // const [showCourseTypeModal, setShowCourseTypeModal] = useState(false)
     const [scrolling, setscrolling] = useState(false);
     const scrollY = useSharedValue(0);
@@ -194,6 +208,38 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
         });
     }, []);
 
+
+    ///get course detail
+    const getCartCount = async () => {
+        setLoading(true);
+        var url = GET_COURSEDETAIL
+        var murl = `/` + route?.params?.id
+        url = url + murl
+        console.log('mu murl===>', url);
+        try {
+            const resp = await getApiWithToken(userToken, url);
+            console.log('get coursesss detail---->', resp?.data?.data);
+            if (resp?.data?.status) {
+                // setProfile(resp?.data?.data)
+                setMyCoursesDetail(resp?.data?.data)
+
+            } else {
+                Toast.show({ text1: resp.data.message });
+            }
+        } catch (error) {
+            console.log('error in getCartCount', error);
+        }
+        setLoading(false);
+    };
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setLoading(true);
+            getCartCount()
+            setLoading(false);
+        });
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [isFocus]);
 
     // const getProductDetails = async () => {
     //     const postData = new FormData();
@@ -306,25 +352,25 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
     const RenderItemLead = ({ item }) => {
         console.log('muuuu item--->>', item)
         return (
-            <TouchableOpacity style={styles.moduleView} onPress={() => { item.id === '1' ? navigation.navigate('ModuleScreen') : item.id === '1' ? navigation.navigate('Summary') : navigation.navigate('ModuleListing') }}>
+            <TouchableOpacity style={[styles.moduleView, {}]} onPress={() =>
+
+                // { item.id === '1' ? navigation.navigate('ModuleScreen') : item.id === '1' ? navigation.navigate('Summary') : navigation.navigate('ModuleListing') }
+                navigation.navigate('ModuleListing', { id: item.id })
+            }
+
+            >
                 <Module></Module>
-                <View>
-                    <MyText
-                        text={item?.title}
-                        fontFamily="Roboto"
-                        fontWeight='bold'
-                        fontSize={14}
-                        textColor={Color.LIGHT_BLACK}
-                        style={{ width: dimensions.SCREEN_WIDTH * 0.52 }}
-                    />
-                    <MyText
-                        text={'2/4'}
-                        fontFamily="Roboto"
-                        fontWeight='500'
-                        fontSize={18}
-                        textColor={Color.PRIMARY}
-                    />
-                </View>
+
+                <MyText
+                    text={item?.module}
+                    fontFamily="Roboto"
+                    fontWeight='bold'
+                    fontSize={14}
+                    textColor={Color.LIGHT_BLACK}
+                    style={{ width: dimensions.SCREEN_WIDTH * 0.52, justifyContent: 'center', marginTop: 16 }}
+                />
+
+
                 <TouchableOpacity style={{
                     width: 44, height: 44,
                     borderRadius: 5, backgroundColor: Color.PRIMARY, justifyContent: 'center', alignItems: 'center', marginTop: 6
@@ -654,6 +700,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                     onScroll={handleScroll}
                     scrollEventThrottle={16}
                     style={styles.mainView}>
+                    {console.log('jkjkjkjk--->>', myCoursesDetail)}
                     {/* {productDetails?.thumb?.path && <ImageBackground
                         source={{ uri: productDetails?.thumb?.path }}
                         // source={require('assets/images/rectangle-1035.png')}
@@ -662,14 +709,14 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                     <View style={{ width: dimensions.SCREEN_WIDTH * 0.90, height: 'auto', backgroundColor: 'white', marginTop: 20, borderRadius: 10 }}>
                         <ImageBackground
                             // source={{ uri: productDetails?.thumb?.path }}
-                            source={require('../../Global/Images/images.png')}
+                            source={{ uri: `${myCoursesDetail.thumbnail}` }}
                             style={styles.crseImg}
                             imageStyle={{ borderRadius: 10 }}>
                             <TouchableOpacity
                                 onPress={() => {
                                     setShowModal({
                                         isVisible: true,
-                                        // data: productDetails,
+                                        data: myCoursesDetail,
                                     });
                                 }}>
                                 {/* <Image source={require('assets/images/play-icon.png')} /> */}
@@ -681,7 +728,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                             <Laptop style={{ marginTop: 12 }}></Laptop>
 
                             <View style={{ flexDirection: 'column', marginHorizontal: 12 }}>
-                                <MyText text={'Improving Self-Image and Confidence'} fontWeight='500' fontSize={14} textColor={Color.LIGHT_BLACK} fontFamily='Roboto' />
+                                <MyText text={myCoursesDetail?.title} fontWeight='500' fontSize={14} textColor={Color.LIGHT_BLACK} fontFamily='Roboto' />
 
                                 <View style={{ flexDirection: 'row', marginVertical: 6 }}>
                                     <Star style={{ marginTop: 2 }}></Star>
@@ -692,12 +739,12 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                                 </View>
                             </View>
                         </View>
-                        <MyText text={'This module will give you a sense of what is going to happen. An intro to how this all started. An idea of what you can become if you hold a growth mindset.'} fontWeight='400' fontSize={14} textColor={'#66757F'} fontFamily='Roboto' style={{ alignSelf: 'center', marginHorizontal: 14, lineHeight: 24 }} />
+                        <MyText text={myCoursesDetail?.description} fontWeight='400' fontSize={14} textColor={'#66757F'} fontFamily='Roboto' style={{ alignSelf: 'center', marginHorizontal: 14, lineHeight: 24 }} />
                         <View style={{ backgroundColor: '#F3F8E1', height: 'auto', width: dimensions.SCREEN_WIDTH * 0.90, paddingVertical: 12, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, marginTop: 7 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.85, marginHorizontal: 9, }}>
                                 <View style={{ flexDirection: 'row', }}>
                                     <Profile ></Profile>
-                                    <MyText text={'Max bryant'} fontWeight='400' fontSize={13} textColor={'#6A6A6A'} fontFamily='Roboto' style={{ alignSelf: 'center', lineHeight: 24, marginHorizontal: 6 }} />
+                                    <MyText text={myCoursesDetail?.created_by} fontWeight='400' fontSize={13} textColor={'#6A6A6A'} fontFamily='Roboto' style={{ alignSelf: 'center', lineHeight: 24, marginHorizontal: 6 }} />
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Chapter></Chapter>
@@ -705,7 +752,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Calendar height={22} width={22}></Calendar>
-                                    <MyText text={'Date: 26 Jun 2023'} fontWeight='400' fontSize={13} textColor={'#6A6A6A'} fontFamily='Roboto' style={{ alignSelf: 'center', lineHeight: 24, marginHorizontal: 6 }} />
+                                    <MyText text={'26 Jun 2023'} fontWeight='400' fontSize={13} textColor={'#6A6A6A'} fontFamily='Roboto' style={{ alignSelf: 'center', lineHeight: 24, marginHorizontal: 6 }} />
                                 </View>
                             </View>
                         </View>
@@ -714,7 +761,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                     <View>
                         <FlatList
                             horizontal={false}
-                            data={data}
+                            data={myCoursesDetail?.modules}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
                             keyExtractor={(item, index) => index.toString()}
@@ -848,7 +895,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                             style={{ marginLeft: 5 }}
                         />}
                     </View> */}
-                    {console.log('klklk videp modal---->>>', showModal?.data)}
+                    {console.log('klklk videp modal---->>>', myCoursesDetail?.disclaimers_introduction)}
                     {showModal.isVisible ? (
 
                         <VideoModal
@@ -856,7 +903,7 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                             toggleModal={toggleModal}
                             videoDetail={{
                                 ...showModal?.data,
-                                url: 'https://niletechinnovations.com/projects/trackcert/public/upload/disclaimers-introduction/1709727524.mp4',
+                                url: myCoursesDetail?.disclaimers_introduction,
                             }}
                         // {...props}
                         />
@@ -1099,6 +1146,8 @@ const CourseDetail = ({ navigation, dispatch, route }) => {
                         />
                     </View>
                 ) : null} */}
+                {loading ? <Loader /> : null}
+
                 {/* <CustomLoader showLoader={showLoader} /> */}
                 {/* <Review
                     visible={showReviewModal}

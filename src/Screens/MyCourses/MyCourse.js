@@ -19,6 +19,7 @@ import {
 import { dimensions } from '../../Global/Color';
 import SearchWithIcon from '../../Components/SearchWithIcon/SearchWithIcon';
 
+import { useIsFocused } from "@react-navigation/native";
 //import : custom components
 import MyHeader from '../../Components/MyHeader/MyHeader';
 import MyText from '../../Components/MyText/MyText';
@@ -36,9 +37,12 @@ import Color from '../../Global/Color';
 //import : styles
 
 //import : modal
+import Loader from '../../Components/Loader';
 //import : redux
-
-
+import { connect, useSelector, useDispatch } from 'react-redux';
+//import api
+import { GET_PROFILE, postApiWithToken, LOGOUT, getApiWithToken, GET_MYCOURSES } from '../../Global/Service';
+import { CommonActions } from '@react-navigation/core';
 const physicianCourse = [{
     id: '1',
     title: 'Module 01',
@@ -70,18 +74,29 @@ const physicianCourse = [{
 // import {WebView} from 'react-native-webview';
 
 const MyCourse = ({ navigation }) => {
+    const dispatch = useDispatch();
     //variables
     const LINE_HEIGTH = 25;
     //variables : redux
+    const userToken = useSelector(state => state.user.userToken);
 
     const [showLoader, setShowLoader] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [categoriesData, setCategoriesData] = useState([]);
     const [filteredcategoryData, setFilteredcategoryData] = useState([]);
+    const [loading, setLoading] = useState('')
+    const isFocus = useIsFocused()
     const [refreshing, setRefreshing] = useState(false);
-    useEffect(() => {
-
-    }, []);
+    const [courses, setMyCourses] = useState([])
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setLoading(true);
+            getCartCount()
+            setLoading(false);
+        });
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [isFocus]);
     const checkcon = () => {
         // getCategories();
     };
@@ -94,20 +109,45 @@ const MyCourse = ({ navigation }) => {
             setRefreshing(false);
         });
     }, []);
+
+
+    //get data for myCourses
+    //get data for list
+    const getCartCount = async () => {
+        setLoading(true);
+        try {
+            const resp = await getApiWithToken(userToken, GET_MYCOURSES);
+            console.log('get coursesss---->', resp?.data?.data);
+            if (resp?.data?.status) {
+                // setProfile(resp?.data?.data)
+                setMyCourses(resp?.data?.data)
+
+            } else {
+                Toast.show({ text1: resp.data.message });
+            }
+        } catch (error) {
+            console.log('error in getCartCount', error);
+        }
+        setLoading(false);
+    };
+
+
+
     const RenderItemLead = ({ item }) => {
+        console.log('thumbnail--->>', item.thumbnail);
         return (
             <TouchableOpacity style={styles.teamView}
                 onPress={() => {
-                    navigation.navigate('CourseDetail')
+                    navigation.navigate('CourseDetail', { id: item.id })
                 }}
             >
                 <View style={styles.circularBackground}>
-                    <Bat style={{ alignSelf: 'center' }}></Bat>
-
+                    {/* <Bat style={{ alignSelf: 'center' }}></Bat> */}
+                    <Image source={{ uri: item?.thumbnail }} style={{ height: 66, width: 66, resizeMode: 'cover', borderRadius: 100, alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}></Image>
                 </View>
                 <View style={{ marginTop: 28 }}>
                     <MyText text={item.title} fontWeight='400' fontSize={14} textColor={Color.LIGHT_BLACK} fontFamily='Roboto' style={{ textAlign: 'center', }} />
-                    <View style={styles.statusView}>
+                    {/* <View style={styles.statusView}>
                         {item.status == 'Completed' ?
                             <View style={styles.rowView}>
                                 <Completed style={{ alignSelf: 'center' }}></Completed>
@@ -119,9 +159,9 @@ const MyCourse = ({ navigation }) => {
                                 <Pending style={{ alignSelf: 'center' }}></Pending>
                                 <MyText text={item.status} fontWeight='400' fontSize={12} textColor={Color.PRIMARY} fontFamily='Roboto' style={{ textAlign: 'center', marginHorizontal: 2 }} />
                             </View>}
-                    </View>
+                    </View> */}
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity >
         )
     }
     //UI
@@ -165,7 +205,7 @@ const MyCourse = ({ navigation }) => {
                     <View style={{ alignSelf: 'center', width: dimensions.SCREEN_WIDTH, marginTop: 20, alignItems: 'center', justifyContent: 'center', }}>
                         <FlatList
                             horizontal={false}
-                            data={physicianCourse}
+                            data={courses}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
                             numColumns={2}
@@ -211,6 +251,7 @@ const MyCourse = ({ navigation }) => {
                     </View>
 
                 </ScrollView>
+                {loading ? <Loader /> : null}
                 {/* <CustomLoader showLoader={showLoader} /> */}
             </View>
         </SafeAreaView>

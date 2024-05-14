@@ -83,7 +83,7 @@ const Profile = ({ navigation }) => {
     };
     //variables : redux
     const userToken = useSelector(state => state.user.userToken);
-
+    console.log('my user token---->>', userToken);
     const [animating, setAnimating] = useState(true);
     ;
     const [scrolling, setscrolling] = useState(false);

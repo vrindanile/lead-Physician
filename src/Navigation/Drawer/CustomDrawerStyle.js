@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: Color.WHITE,
+        backgroundColor: Color.LIGHT_BLACK,
         justifyContent: 'center'
     },
     logoCloseView: {
@@ -106,7 +106,8 @@ export const styles = StyleSheet.create({
 
     },
     viewProfile: {
-        height: 32, width: 74, backgroundColor: 'white', borderRadius: 5, marginLeft: 7, justifyContent: 'center'
+        height: 32, width: 74, backgroundColor: 'white', borderRadius: 5, marginLeft: 0, justifyContent: 'center',
+        marginBottom: 12
 
     }
 });

@@ -147,6 +147,6 @@ export const styles = StyleSheet.create({
         height: 'auto',
         padding: 10,
         backgroundColor: Color.WHITE, borderRadius: 10,
-        marginVertical: 7, flexDirection: 'row', justifyContent: 'space-between'
+        marginVertical: 7, flexDirection: 'row', justifyContent: 'space-between',
     }
 });

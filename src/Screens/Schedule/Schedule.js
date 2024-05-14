@@ -14,6 +14,7 @@ import moment from 'moment';
 import MyText from '../../Components/MyText/MyText';
 import { styles } from './ScheduleStyle';
 import { setLoading, saveUserResult } from '../../redux/actions/user_action';
+import Loader from '../../Components/Loader';
 import WebView from 'react-native-webview';
 import Color from '../../Global/Color';
 import MyHeader from '../../Components/MyHeader/MyHeader';
@@ -31,8 +32,8 @@ import OnGoing from '../../Global/Images/clock.svg'
 import Zoom from '../../Global/Images/Zoom.svg'
 import Calendar from '../../Global/Images/calendarWhite.svg'
 // const axios = require('axios');
-const Schedule = (navigation) => {
-    console.log('my navigation--->>', navigation);
+const Schedule = ({ navigation }) => {
+
     const [DATA2, setDATA2] = useState(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
     const [selected, setselected] = useState(true)
     const [click1, setclick1] = useState('Mon')
@@ -48,7 +49,7 @@ const Schedule = (navigation) => {
     const [title, setTitle] = useState('')
     const [lode, setlode] = useState(true)
     const [date, setDate] = useState(new Date());
-    console.log('my new data---->>>', new Date());
+
     const [displaydate, setdisplaydate] = useState('Choose Date')
     const [apiDate, setapiDate] = useState('2024-01-01')
     const [events, setEvents] = useState([
@@ -89,7 +90,7 @@ const Schedule = (navigation) => {
     }, []);
     const userToken = useSelector(state => state.user.userToken);
     const user = useSelector(state => state.user.userInfo);
-    console.log('my user Toeknnn--->>>', user);
+
     useEffect(() => {
         //  getdates()
         getHome(new Date(), 'date')
@@ -131,38 +132,6 @@ const Schedule = (navigation) => {
         var mydate = dateformates(mm, dd, yy)
         return mydate
     }
-    // const getHome = async (dat, withs) => {
-    //     setLoading(true)
-    //     console.log('=====================dat===============');
-    //     console.log(dat);
-    //     var mm = dat.toString().substring(4, 7)
-    //     var dd = dat.toString().substring(8, 10)
-    //     var yy = dat.toString().substring(11, 15)
-    //     var mydate2 = dateformates2(mm, dd, yy)
-    //     var mydate = dateformates(mm, dd, yy)
-    //     setapiDate(mydate2)
-    //     setdisplaydate(mydate)
-    //     console.log('============mydate2========================', mydate2);
-
-    //     // let formdata = new FormData();
-    //     // formdata.append("date", mydate2);
-    //     const { responseJson, err } = await requestPostApi(home, formdata, 'POST', user.token)
-    //     setLoading(false)
-    //     console.log('the home==>>', responseJson)
-    //     if (err == null) {
-    //         if (responseJson.status) {
-    //             setEvents(responseJson.data)
-    //             setDATA(responseJson.data)
-    //             //  setclick1(dat)
-    //         } else {
-    //             setalert_sms(responseJson.message)
-    //             setMy_Alert(true)
-    //         }
-    //     } else {
-    //         setalert_sms(err)
-    //         setMy_Alert(true)
-    //     }
-    // }
 
     const getHome = async (dat, withs) => {
         setLoading(true)
@@ -177,19 +146,17 @@ const Schedule = (navigation) => {
         setapiDate(mydate2)
         setdisplaydate(mydate)
         console.log('============mydate2========================', mydate2);
-
         // let formdata = new FormData();
         // formdata.append("date", mydate2);
-        const resp = await getApiWithToken(userToken, GET_SCHDULE);
-        console.log('get profile2222 in getHome----->>>>', resp?.data?.data);
-        setLoading(false)
-        console.log('the home==>>', resp?.data?.status)
 
+        const resp = await getApiWithToken(userToken, GET_SCHDULE);
         if (resp?.data?.status) {
             setEvents(resp?.data?.data)
             setDATA(resp?.data?.data)
+            setLoading(false)
             //  setclick1(dat)
         } else {
+            setLoading(false)
             setalert_sms(responseJson.message)
             setMy_Alert(true)
         }
@@ -252,12 +219,10 @@ const Schedule = (navigation) => {
     }
 
     const onChange = (event, selectedDate) => {
+        console.log('my selected date--->>', selectedDate);
         const currentDate = selectedDate || date;
-        setopenDateModal(Platform.OS === 'ios');
 
-        console.log('====================================currentDate');
-        console.log(currentDate);
-        console.log('====================================',);
+        setopenDateModal(Platform.OS === 'ios')
 
         var mm = currentDate.toString().substring(4, 7)
         var dd = currentDate.toString().substring(8, 10)
@@ -266,10 +231,13 @@ const Schedule = (navigation) => {
         var mydate2 = dateformates2(mm, dd, yy)
         setdisplaydate(mydate)
         setapiDate(mydate2)
-        // setDate(currentDate)
-        //setopenDateModal(false)
+
+        setDate(currentDate)
+        setopenDateModal(false)
         setlode(!lode)
+
         if (Platform.OS == 'android') {
+
             getHome(currentDate, 'date')
         }
     };
@@ -305,10 +273,7 @@ const Schedule = (navigation) => {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '95%', alignSelf: 'center' }}>
                 <View style={{ width: '82%', height: 50, backgroundColor: '#fff', borderRadius: 10, marginTop: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                     <Text style={{ color: '#000', fontSize: 13, textAlign: 'center', fontWeight: '300' }}>{displaydate}</Text>
-                    {/* <TouchableOpacity onPress={() => { setopenDateModal(true) }} style={{ backgroundColor: 'red' }}>
-                        <Image source={require('../../assets/images/Icons/calendra.png')} style={{ height: 25, width: 25, resizeMode: 'stretch', alignSelf: 'center' }}></Image>
-                        <Calendar></Calendar>
-                    </TouchableOpacity> */}
+
                 </View>
                 <TouchableOpacity style={{ width: 60, height: 50, backgroundColor: Color.PRIMARY, justifyContent: 'center', borderRadius: 10, marginTop: 15 }}
                     onPress={() => {
@@ -327,28 +292,23 @@ const Schedule = (navigation) => {
                 alignItems: 'center',
                 justifyContent: 'center', flex: 1
             }}>
-                <View style={{ width: '100%', height: 45, position: 'absolute', backgroundColor: '#fff', zIndex: 999, top: 4 }} />
+                <View style={{ width: '100%', height: 45, position: 'absolute', backgroundColor: '#fff', zIndex: 999, top: 4, }} />
+
                 <EventCalendar
-                    eventTapped={eventClicked}
-                    events={events}
                     width={dimensions.SCREEN_WIDTH}
                     size={60}
+                    events={events}
+                    eventTapped={eventClicked}
+                    // events={events}
+                    // width={dimensions.SCREEN_WIDTH}
+                    // size={60}
+
                     renderEvent={(item) => {
-                        console.log('=================hhhh===================',);
-                        console.log(item);
-                        console.log('====================================');
                         const startTime = new Date(`2000-01-01T${item.schedule_start_time}`);
                         const endTime = new Date(`2000-01-01T${item.schedule_end_time}`);
-
                         const timeDifference = endTime - startTime;
-                        console.log('timeDifference !== 60 * 60 * 1000', timeDifference !== 45 * 60 * 1000, timeDifference);
                         if (timeDifference === 2 * 60 * 60 * 1000) {
-                            { console.log('did i reach in this condition'); }
-
-
-
                             return (
-
                                 <TouchableOpacity style={{
                                     width: '98%', borderRadius: 4, alignSelf: 'center',
                                     backgroundColor: '#fff',
@@ -359,12 +319,12 @@ const Schedule = (navigation) => {
                                     paddingVertical: 10, marginTop: 9,
 
                                 }}
-
+                                    onPress={() => { navigation.navigate('SchduleDetails', { id: item?.id }) }}
                                 >
-                                    <TouchableOpacity style={{ width: '100%', alignSelf: 'center', height: 'auto' }}
-
+                                    <View style={{ width: '100%', alignSelf: 'center', height: 'auto', }}
+                                        onPress={() => { }}
                                     >
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.72, alignSelf: 'center' }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.72, alignSelf: 'center', }}>
                                             <View style={styles.circleView}>
                                                 <MyText
                                                     text={'LP'}
@@ -384,14 +344,12 @@ const Schedule = (navigation) => {
                                                 fontSize={14}
                                                 textColor={Color.LIGHT_BLACK}
                                                 style={{ alignSelf: 'center' }}
-
                                             />
-                                            {console.log('my meeting type111---->>', item.meeting_type)}
                                             <View style={styles.buttonBi}>
                                                 <MyText
                                                     text={item.meeting_type}
                                                     fontFamily="Roboto"
-                                                    fontWeight='500'
+                                                    fontWeight='700'
                                                     fontSize={12}
                                                     textColor={Color.WHITE}
                                                     style={{ alignSelf: 'center' }}
@@ -418,7 +376,7 @@ const Schedule = (navigation) => {
                                             <View style={{ flexDirection: 'row', }}>
                                                 <OnGoing></OnGoing>
                                                 <MyText
-                                                    text={`${item.schedule_start_date} , ${moment(item.schedule_start_time, "HH:mm:ss").format("hh:mm A")}`}
+                                                    text={`${moment(item.schedule_start_date).format('MM/DD/YYYY')}, ${moment(item.schedule_start_time, "HH:mm:ss").format("hh:mm A")}`}
                                                     fontFamily="Roboto"
                                                     fontWeight='400'
                                                     fontSize={13}
@@ -431,7 +389,7 @@ const Schedule = (navigation) => {
                                         <View style={{ width: dimensions.SCREEN_WIDTH, height: 1, backgroundColor: '#E7EAF1', marginVertical: 7, }}>
 
                                         </View>
-                                        <TouchableOpacity style={{ marginHorizontal: 10, flexDirection: 'row' }} onPress={() => { setWebViewVisible(true), setTitle(item.zoom_link) }}>
+                                        <View style={{ marginHorizontal: 10, flexDirection: 'row' }} >
                                             <Zoom height={22} ></Zoom>
                                             <MyText
                                                 text={'Join Zoom Meeting'}
@@ -442,8 +400,8 @@ const Schedule = (navigation) => {
                                                 style={{}}
 
                                             />
-                                        </TouchableOpacity>
-                                    </TouchableOpacity>
+                                        </View>
+                                    </View>
 
                                 </TouchableOpacity>
 
@@ -451,7 +409,7 @@ const Schedule = (navigation) => {
                         }
                         else {
                             return (
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.75 }}>
+                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.75, }} onPress={() => { navigation.navigate('SchduleDetails', { id: item?.id }) }}>
                                     <MyText
                                         text={item.meeting_title}
                                         fontFamily="Roboto"
@@ -460,11 +418,10 @@ const Schedule = (navigation) => {
                                         textColor={Color.LIGHT_BLACK}
                                         style={{}}
 
-
                                     />
                                     <Text>{moment(item.schedule_start_time, "HH:mm:ss").format("hh:mm A")}</Text>
 
-                                </View>
+                                </TouchableOpacity>
                             )
 
                         }
@@ -475,178 +432,12 @@ const Schedule = (navigation) => {
                 />
 
 
-                {/* <EventCalendar
-                    eventTapped={eventClicked}
-                    events={events}
-                    width={dimensions.SCREEN_WIDTH}
-                    size={60}
-                    renderEvent={(data) => {
-                        console.log('=================hhhh===================', data.schedule_start_time);
-                        console.log(data);
-                        const startTime = new Date(`2000-01-01T${data.schedule_start_time}`);
-                        const endTime = new Date(`2000-01-01T${data.schedule_end_time}`);
-
-                        const timeDifference = endTime - startTime;
-                        console.log('timeDifference !== 15 * 60 * 1000', timeDifference !== 45 * 60 * 1000, timeDifference);
-                        if (timeDifference !== 45 * 60 * 1000) {
-                            { console.log('did i reach in this condition'); }
-                            return (
-
-                                <TouchableOpacity style={{
-                                    width: '98%', borderRadius: 4, alignSelf: 'center',
-                                    backgroundColor: '#fff',
-                                    shadowColor: '#000',
-                                    shadowRadius: 2,
-                                    shadowOpacity: 0.2,
-                                    elevation: 3,
-                                    paddingVertical: 10, marginTop: 9
-                                }} onPress={() => {
-                                    props.navigation.navigate('ServiceDetails', { data: data, selectedDate: displaydate })
-                                }}>
-                                    <TouchableOpacity style={{ width: '100%', alignSelf: 'center', }}
-
-
-
-                                    >
-
-                                        {console.log('my valuesmeeting_title--->>', data)}
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: dimensions.SCREEN_WIDTH * 0.72, alignSelf: 'center' }}>
-                                            <View style={styles.circleView}>
-                                                <MyText
-                                                    text={'LP'}
-                                                    fontFamily="Roboto"
-                                                    fontWeight='500'
-                                                    fontSize={14}
-                                                    textColor={Color.PRIMARY}
-                                                    style={{ alignSelf: 'center' }}
-
-                                                />
-
-                                            </View>
-                                            <MyText
-                                                text={'Dr. Elsie Koh, MD MHL'}
-                                                fontFamily="Roboto"
-                                                fontWeight='bold'
-                                                fontSize={14}
-                                                textColor={Color.LIGHT_BLACK}
-                                                style={{ alignSelf: 'center' }}
-
-                                            />
-                                            <View style={styles.buttonBi}>
-                                                <MyText
-                                                    text={data.meeting_type}
-                                                    fontFamily="Roboto"
-                                                    fontWeight='500'
-                                                    fontSize={12}
-                                                    textColor={Color.WHITE}
-                                                    style={{ alignSelf: 'center' }}
-
-                                                />
-                                            </View>
-
-                                        </View>
-                                        <View style={{ width: dimensions.SCREEN_WIDTH, height: 1, backgroundColor: '#E7EAF1', marginVertical: 5 }}>
-
-                                        </View>
-                                        <View style={{ marginHorizontal: 14 }}>
-                                            <MyText
-                                                text={data.meeting_title}
-                                                fontFamily="Roboto"
-                                                fontWeight='500'
-                                                fontSize={14}
-                                                textColor={Color.LIGHT_BLACK}
-                                                style={{}}
-
-                                            />
-
-                                            <View style={{ flexDirection: 'row', }}>
-                                                <OnGoing></OnGoing>
-                                                <MyText
-                                                    text={`${data.schedule_start_date},${data.schedule_start_time}`}
-                                                    fontFamily="Roboto"
-                                                    fontWeight='400'
-                                                    fontSize={13}
-                                                    textColor={Color.LIGHT_BLACK}
-                                                    style={{ marginHorizontal: 6 }}
-
-                                                />
-                                            </View>
-                                        </View>
-                                        <View style={{ width: dimensions.SCREEN_WIDTH, height: 1, backgroundColor: '#E7EAF1', marginVertical: 7, }}>
-
-                                        </View>
-                                        <TouchableOpacity style={{ marginHorizontal: 10, flexDirection: 'row' }} onPress={() => { setWebViewVisible(true), setTitle(data.zoom_link) }}>
-                                            <Zoom height={22} ></Zoom>
-                                            <MyText
-                                                text={'Join Zoom Meeting'}
-                                                fontFamily="Roboto"
-                                                fontWeight='400'
-                                                fontSize={13}
-                                                textColor={'#3DA1E3'}
-                                                style={{}}
-                                            />
-                                        </TouchableOpacity>
-                                    </TouchableOpacity>
-                                </TouchableOpacity>
-
-                            );
-                        } else {
-
-                            return (
-                                <TouchableOpacity style={{
-                                    width: '98%', borderRadius: 4, alignSelf: 'center',
-                                    backgroundColor: '#fff',
-                                    shadowColor: '#000',
-                                    shadowRadius: 2,
-                                    shadowOpacity: 0.2,
-                                    elevation: 3,
-                                    paddingVertical: 10, marginTop: 9
-                                }} onPress={() => {
-                                    props.navigation.navigate('ServiceDetails', { data: data, selectedDate: displaydate })
-                                }}>
-                                    <TouchableOpacity style={{ width: '100%', alignSelf: 'center', }}
-
-
-                                    >
-
-                                        {console.log('my valuesmeeting_title--->>', data)}
-
-
-                                        <View style={{ marginHorizontal: 14 }}>
-                                            <MyText
-                                                text={data.meeting_title}
-                                                fontFamily="Roboto"
-                                                fontWeight='500'
-                                                fontSize={14}
-                                                textColor={Color.LIGHT_BLACK}
-                                                style={{}}
-                                            />
-                                        </View>
-                                        <TouchableOpacity style={{ marginHorizontal: 10, flexDirection: 'row' }} onPress={() => { setWebViewVisible(true), setTitle(data.zoom_link) }}>
-                                            <Zoom height={22} ></Zoom>
-                                            <MyText
-                                                text={'Join Zoom Meeting'}
-                                                fontFamily="Roboto"
-                                                fontWeight='400'
-                                                fontSize={13}
-                                                textColor={'#3DA1E3'}
-                                                style={{}}
-                                            />
-                                        </TouchableOpacity>
-                                    </TouchableOpacity>
-                                </TouchableOpacity>)
-                        }
-                    }
-                    }
-                    scrollToFirst
-
-                /> */}
             </View>
 
 
             {/* <View style={{width:100,height:800}} /> */}
             {/* </ScrollView> */}
-            {console.log('my calendar date time picker---->>>', opendateModal)}
+
             {opendateModal ?
                 <View style={{ backgroundColor: '#fff', position: 'absolute', alignSelf: 'center', bottom: 0, width: '98%' }}>
                     <View style={{ width: '85%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 10 }}>
@@ -677,7 +468,7 @@ const Schedule = (navigation) => {
                 transparent={false}
             >
                 <View style={{ flex: 1 }}>
-                    {console.log('my webview url---?>>', JSON.stringify(title))}
+
                     <WebView
                         source={{
                             uri:
@@ -693,8 +484,8 @@ const Schedule = (navigation) => {
                 </View>
             </Modal>
             {/* </View>*/}
-            {/* {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null} */}
-            {/* {loading ? <Loader /> : null} */}
+            {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
+            {loading ? <Loader /> : null}
         </SafeAreaView>
     )
 }

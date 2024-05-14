@@ -21,7 +21,7 @@ import { styles } from './CustomDrawerStyle';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 //import : redux
-// import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 // import { logOutUser, setUser } from 'src/reduxToolkit/reducer/user';
 import { useDrawerStatus } from '@react-navigation/drawer';
 // import CustomLoader from '../../components/CustomLoader/CustomLoader';
@@ -45,7 +45,9 @@ import Privacy from '../../Global/Images/PrivacySticky.svg'
 
 const CustomDrawer = ({ navigation }) => {
     //variables
-    // const userToken = useSelector(state => state.user.userToken);
+    const userToken = useSelector(state => state.user.userToken);
+    const user = useSelector(state => state?.user?.userInfo);
+    console.log('my userToken from the drawer', user);
     // const dispatch = useDispatch();
     //hook : states
     const [showLoader, setShowLoader] = useState(false);
@@ -63,22 +65,56 @@ const CustomDrawer = ({ navigation }) => {
         // navigation.dispatch(resetIndexGoToSignup);
     };
     const gotoHome = () => {
-        // navigation.navigate(ScreenNames.BOTTOM_TAB, { screen: ScreenNames.HOME });
+        navigation.navigate('BottomTab');
     };
     const gotoSuperAdminCourses = () => {
         // navigation.navigate(ScreenNames.SUPER_ADMIN_COURSES);
     };
+    const goToChat = () => {
+        navigation.navigate('ChatDetail')
+    }
+    const gotoabutUs = () => {
+        console.log('my terms and codition');
+        navigation.navigate('TermsCondition', { params: 'About' })
+    }
+    const gotoPrivacy = () => {
+        navigation.navigate('TermsCondition', { params: 'Privacy' })
+    }
+    const gotoPolicy = () => {
+        navigation.navigate('TermsCondition', { params: 'Policy' })
+    }
     const gotoAllProducts = () => {
         // navigation.navigate(ScreenNames.ALL_PRODUCTS);
     };
     const gotoMyWhishlist = () => {
-        // navigation.navigate(ScreenNames.BOTTOM_TAB, {
-        //     screen: ScreenNames.WISHLIST,
-        // });
+        navigation.navigate('Favorites');
     };
+    const gotoMyCourses = () => {
+        navigation.navigate('MyCourse')
+    }
     const gotoMyOrders = () => {
         navigation.navigate('GoalsList');
     };
+    const gotoFacebook = () => {
+        navigation.navigate('TermsCondition', { params: 'Facebook' })
+    }
+    const gotoYoutube = () => {
+        navigation.navigate('TermsCondition', { params: 'Youtube' })
+    }
+
+    const gotoInsta = () => {
+        navigation.navigate('TermsCondition', { params: 'Instagram' })
+    }
+
+    const gotoLinkedin = () => {
+        navigation.navigate('TermsCondition', { params: 'Linkdin' })
+    }
+    const gotoTwitter = () => {
+        navigation.navigate('TermsCondition', { params: 'Twitter' })
+    }
+    const gotoSubscription = () => {
+        navigation.navigate('Subscription')
+    }
     const gotoWelcome = () =>
         CommonActions.reset({
             index: 1,
@@ -131,10 +167,19 @@ const CustomDrawer = ({ navigation }) => {
                     </TouchableOpacity> */}
                 </View>
                 <View style={styles.overflowView}>
-                    <Profile style={{ marginLeft: 10 }}></Profile>
-                    <View style={{ flexDirection: 'column' }}>
+                    {/* <Profile style={{ marginLeft: 10 }}></Profile> */}
+                    <Image
+                        source={
+                            user?.profile_image
+                                ? { uri: user?.profile_image }
+                                : require('../../Global/Images/user-default.png')
+                        }
+                        style={{ height: 43, width: 43, borderRadius: 50, marginHorizontal: 6 }}
+                    />
+                    <View sty
+                        le={{ flexDirection: 'column' }}>
                         <MyText
-                            text={'John'}
+                            text={user?.first_name}
                             fontWeight={600}
                             fontSize={16}
                             textColor="white"
@@ -142,7 +187,7 @@ const CustomDrawer = ({ navigation }) => {
                             style={{}}
                         />
                         <MyText
-                            text={'Katty@gmail.com'}
+                            text={user?.email}
                             fontWeight={400}
                             fontSize={14}
                             textColor="white"
@@ -150,7 +195,7 @@ const CustomDrawer = ({ navigation }) => {
                             style={{}}
                         />
                     </View>
-                    <View style={styles.viewProfile}>
+                    <TouchableOpacity style={styles.viewProfile} onPress={() => { navigation.navigate('Profile') }}>
                         <MyText
                             text={'View Profile'}
                             fontWeight={500}
@@ -159,7 +204,7 @@ const CustomDrawer = ({ navigation }) => {
                             fontFamily="Roboto"
                             style={{ alignSelf: 'center' }}
                         />
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={{ padding: 20, paddingLeft: 28, paddingRight: 24, marginTop: 60 }}>
                     <View style={{ flexDirection: 'row' }}>
@@ -167,8 +212,8 @@ const CustomDrawer = ({ navigation }) => {
                         <DrawerItemList
                             Title="Home"
                             icon={() => <Like width={34} height={45}></Like>}
-                        // image={require('assets/images/home-sb.png')}
-                        // onPress={gotoHome}
+                            // image={require('assets/images/home-sb.png')}
+                            onPress={gotoHome}
                         />
                     </View>
 
@@ -177,7 +222,7 @@ const CustomDrawer = ({ navigation }) => {
                         <DrawerItemList
                             Title="My Favorites Chapters"
                             icon={() => <Like width={34} height={45} />}
-                        // onPress={gotoMyWhishlist}
+                            onPress={gotoMyWhishlist}
                         />
                     </View>
 
@@ -185,8 +230,8 @@ const CustomDrawer = ({ navigation }) => {
                         <Couser ></Couser>
                         <DrawerItemList
                             Title="My Courses"
-                        // image={require('assets/images/my-courses-sb.png')}
-                        // onPress={gotoMyOrders}
+                            // image={require('assets/images/my-courses-sb.png')}
+                            onPress={gotoMyCourses}
                         /></View>
                     <View style={{ flexDirection: 'row' }}>
                         <Couser ></Couser>
@@ -199,8 +244,8 @@ const CustomDrawer = ({ navigation }) => {
                         <Subscription></Subscription>
                         <DrawerItemList
                             Title="Subscription Plans"
-                        // image={require('assets/images/my-courses-sb.png')}
-                        // onPress={gotoSuperAdminCourses}
+                            // image={require('assets/images/my-courses-sb.png')}
+                            onPress={gotoSubscription}
                         />
                     </View>
 
@@ -213,14 +258,16 @@ const CustomDrawer = ({ navigation }) => {
                         <About></About>
                         <DrawerItemList
                             Title="About Us"
-                        // image={require('assets/images/about-us-sb.png')}
-                        // onPress={() => { }}
+                            // image={require('assets/images/about-us-sb.png')}
+                            // onPress={() => { }}
+                            onPress={gotoabutUs}
                         />
                     </View>
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row' }} >
                         <Headphone></Headphone>
                         <DrawerItemList
-                            Title="Help & Support"
+                            Title="Chat Support"
+                            onPress={goToChat}
                         // image={require('assets/images/help-and-support-sb.png')}
                         />
                     </View>
@@ -228,6 +275,7 @@ const CustomDrawer = ({ navigation }) => {
                         <Sticky></Sticky>
                         <DrawerItemList
                             Title="Terms & Conditions"
+                            onPress={gotoPrivacy}
                         // image={require('assets/images/terms-sb.png')}
                         />
                     </View>
@@ -235,7 +283,8 @@ const CustomDrawer = ({ navigation }) => {
                         <Privacy></Privacy>
                         <DrawerItemList
                             Title="Privacy Policy"
-                        // image={require('assets/images/privacy-sb.png')}
+                            // image={require('assets/images/privacy-sb.png')}
+                            onPress={gotoPolicy}
                         />
                     </View>
                     <View style={{ flexDirection: 'row' }}>
@@ -257,11 +306,22 @@ const CustomDrawer = ({ navigation }) => {
                         style={{ marginBottom: 15 }}
                     />
                     <View style={[styles.socialRow, {}]}>
-                        <Facebook style={{ marginHorizontal: 4 }}></Facebook>
-                        <Youtube>
-
-                        </Youtube>
-                        <Insta style={{ marginHorizontal: 4 }}></Insta>
+                        <TouchableOpacity onPress={gotoFacebook}>
+                            <Facebook style={{ marginHorizontal: 4 }}></Facebook>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={gotoYoutube}>
+                            <Youtube>
+                            </Youtube>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={gotoInsta}>
+                            <Insta style={{ marginHorizontal: 4 }}></Insta>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={gotoLinkedin}>
+                            <Image source={require('../../Global/Images/linkedin.png')} style={{ height: 20, width: 20 }}></Image>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={gotoTwitter}>
+                            <Image source={require('../../Global/Images/twitter.png')} style={{ height: 20, width: 20, marginLeft: 7 }}></Image>
+                        </TouchableOpacity>
                         {/* <Image
                             source={require('assets/images/fb.png')}
                             style={{ height: 18, width: 18 }}

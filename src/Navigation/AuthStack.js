@@ -33,6 +33,8 @@ import GoalsList from '../Screens/GoalsList/GoalsList';
 import EditGoal from '../EditGoal/EditGoal';
 import ChatDetail from '../Screens/ChatDetail/ChatDetail';
 import ChatSection from '../Components/Chat/ChatSection';
+import TermsCondition from '../Screens/TermsCondition/TermsCondition';
+import SchduleDetails from '../Screens/SchduleDetails/SchduleDetails';
 const Stack = createNativeStackNavigator();
 const AuthStack = () => {
     return (
@@ -62,6 +64,8 @@ const AuthStack = () => {
             <Stack.Screen name="EditGoal" component={EditGoal} />
             <Stack.Screen name="ChatDetail" component={ChatDetail} />
             <Stack.Screen name="ChatSection" component={ChatSection} />
+            <Stack.Screen name="TermsCondition" component={TermsCondition} />
+            <Stack.Screen name="SchduleDetails" component={SchduleDetails} />
 
         </Stack.Navigator>
     );

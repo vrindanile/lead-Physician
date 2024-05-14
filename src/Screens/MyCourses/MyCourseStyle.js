@@ -180,7 +180,8 @@ export const styles = StyleSheet.create({
         width: 63,
         height: 63,
         backgroundColor: Color.PRIMARY,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     statusView: {
         width: 95, height: 28, borderRadius: 5,

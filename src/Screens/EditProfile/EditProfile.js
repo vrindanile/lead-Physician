@@ -422,7 +422,7 @@ const EditProfile = ({ navigation }) => {
                             paddingRight: 40
                         }}>
                             <EmailSvg width={24} height={24} />
-                            <Text style={{ width: '90%', }}>{emailid}</Text>
+                            <Text style={{ width: '90%', color: 'black' }}>{emailid}</Text>
                         </View>
                         {/* <CustomTextBox
                             imageComponent={<EmailSvg width={24} height={24} />}
@@ -444,6 +444,7 @@ const EditProfile = ({ navigation }) => {
                             // onChangeText={(text) => {
                             //     setPhoneno(text)
                             // }}
+
                             onChangeText={handleChange}
                             placeholder={'Phone'}
                         >

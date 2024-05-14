@@ -143,9 +143,16 @@ export const styles = StyleSheet.create({
         width: responsiveHeight(5),
         borderRadius: responsiveHeight(5),
     },
+    // moduleView: {
+    //     width: dimensions.SCREEN_WIDTH * 0.90,
+    //     height: 'auto',
+    //     padding: 10,
+    //     backgroundColor: Color.WHITE, borderRadius: 10,
+    //     marginVertical: 7, flexDirection: 'row', justifyContent: 'space-between'
+    // },
     moduleView: {
         width: dimensions.SCREEN_WIDTH * 0.90,
-        height: 'auto',
+        height: 200,
         padding: 10,
         backgroundColor: Color.WHITE, borderRadius: 10,
         marginVertical: 7, flexDirection: 'row', justifyContent: 'space-between'

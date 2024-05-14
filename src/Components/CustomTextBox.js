@@ -77,13 +77,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         alignSelf: 'center',
         borderWidth: 1,
-        borderColor: '#959FA6'
+        borderColor: '#959FA6',
+        color: 'black'
     },
     imageContainer: {
         marginRight: 2,
     },
     text: {
         flex: 1,
+        color: 'black'
         // Your text input styles here
     },
     togglePassword: {

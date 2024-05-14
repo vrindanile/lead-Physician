@@ -22,6 +22,12 @@ export const GET_PROFILE = `profile`
 export const GET_SCHDULE = `get-schedule`
 export const LOGOUT = `logout`
 export const CHANGE_PASSWORD = `change-password`
+export const GET_SHDULEDETAIL = `schedule-details`
+export const GET_MYCOURSES = `course/list`
+export const GET_COURSEDETAIL = `course/details`
+export const GET_MODULEDETAIL = `course/module`
+
+
 
 
 export const HOME = `home`;

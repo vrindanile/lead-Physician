@@ -30,10 +30,14 @@ import { dimensions } from '../Global/Color';
 //import : global
 import Color from '../Global/Color';
 import { Service } from '../../../global/Index';
+import { useIsFocused } from "@react-navigation/native";
+//import api
+import { GET_PROFILE, postApiWithToken, LOGOUT, getApiWithToken, GET_MYCOURSES, GET_COURSEDETAIL, GET_MODULEDETAIL } from '../Global/Service';
 //import : styles
 import { styles } from './ModuleListingStyle';
 //import : modal
 //import : redux
+import { connect, useSelector, useDispatch } from 'react-redux';
 // import { connect, useSelector } from 'react-redux';
 // import { width, height } from 'global/Constant';
 // import Divider from 'components/Divider/Divider';
@@ -47,7 +51,7 @@ import Animated, {
     Easing,
 } from 'react-native-reanimated';
 
-
+import Loader from '../Components/Loader';
 
 import Star from '../Global/Images/star.svg'
 import Laptop from '../Global/Images/laptop.svg'
@@ -159,6 +163,9 @@ const data = [{
 ]
 const addToCartObject = {};
 const ModuleListing = ({ navigation, dispatch, route }) => {
+    console.log('my modle listing--->>>', route?.params?.id);
+    const userToken = useSelector(state => state.user.userToken);
+    const isFocus = useIsFocused()
     // const defaultImgPath = Image.resolveAssetSource(defaultImg).uri;
     //variables
     const LINE_HEIGTH = 25;
@@ -180,6 +187,8 @@ const ModuleListing = ({ navigation, dispatch, route }) => {
     // const [pdfLink, setPdfLink] = useState('');
     const [refreshing, setRefreshing] = useState(false);
     const [showModal, setShowModal] = useState({ isVisible: false, data: null });
+    const [loading, setLoading] = useState('')
+    const [moduleDetails, setModuleDeails] = useState([])
     // const [showCourseTypeModal, setShowCourseTypeModal] = useState(false)
     const [scrolling, setscrolling] = useState(false);
     const scrollY = useSharedValue(0);
@@ -188,6 +197,38 @@ const ModuleListing = ({ navigation, dispatch, route }) => {
             isVisible: state.isVisible,
             data: state.data,
         });
+    };
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setLoading(true);
+            getCartCount()
+            setLoading(false);
+        });
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [isFocus]);
+    const getCartCount = async () => {
+        setLoading(true);
+        var url = GET_MODULEDETAIL
+        var murl = `/` + route?.params?.id
+        url = url + murl
+        console.log('mu murl===>', url);
+        try {
+            const resp = await getApiWithToken(userToken, url);
+            console.log('get module detail---->', resp?.data);
+            // resp?.data?.data?.steps
+            if (resp?.data?.status) {
+                // setProfile(resp?.data?.data)
+                // setMyCoursesDetail(resp?.data?.data)
+                setModuleDeails(resp?.data?.data?.steps)
+
+            } else {
+                Toast.show({ text1: resp.data.message });
+            }
+        } catch (error) {
+            console.log('error in getCartCount', error);
+        }
+        setLoading(false);
     };
     // useEffect(() => {
     //     // const unsubscribe = navigation.addListener('focus', () => {
@@ -325,7 +366,7 @@ const ModuleListing = ({ navigation, dispatch, route }) => {
     };
 
     const RenderItemLead = ({ item }) => {
-        console.log('muuuu item--->>', item)
+        console.log('muuuu item44444--->>', item)
         return (
             <TouchableOpacity style={styles.moduleView} onPress={() => { item.id === '1' ? navigation.navigate('ModuleScreen') : navigation.navigate('Summary') }}>
                 <Module></Module>
@@ -684,7 +725,7 @@ const ModuleListing = ({ navigation, dispatch, route }) => {
                     <View>
                         <FlatList
                             horizontal={false}
-                            data={data}
+                            data={moduleDetails}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
                             keyExtractor={(item, index) => index.toString()}
@@ -980,6 +1021,7 @@ const ModuleListing = ({ navigation, dispatch, route }) => {
                     </View>
                 ) : null} */}
                 {/* <CustomLoader showLoader={showLoader} /> */}
+                {loading ? <Loader /> : null}
                 {/* <Review
                     visible={showReviewModal}
                     setVisibility={setShowReviewModal}

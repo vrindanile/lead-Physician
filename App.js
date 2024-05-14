@@ -17,6 +17,7 @@ import Drawer from './src/Navigation/Drawer/Drawer';
 import AuthStack from './src/Navigation/AuthStack';
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 import { Provider } from 'react-redux';
+
 import { store } from './src/reduxToolkit/store/store';
 const App = () => {
   LogBox.ignoreAllLogs()

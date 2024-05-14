@@ -41,7 +41,7 @@ const Chat = ({ navigation }) => {
 
     const RenderTabsTitle = [{
         id: '1',
-        title: 'Group Chat'
+        title: 'Group Chats'
     },
     {
         id: '2',
@@ -79,9 +79,9 @@ const Chat = ({ navigation }) => {
     };
     const onRefresh = React.useCallback(() => {
         // checkcon();
-        wait(2000).then(() => {
-            setRefreshing(false);
-        });
+        // wait(2000).then(() => {
+        //     setRefreshing(false);
+        // });
     }, []);
 
     const RenderTabs = ({ item, activeTab, setActiveTab }) => {

@@ -25,6 +25,7 @@ import Call from '../../Global/Images/call.svg'
 import CustomHeader from '../../Components/CustomHeader';
 import Google from '../../Global/Images/googleIcon.svg';
 import Facebook from '../../Global/Images/facebookLogo.svg'
+import Logo from '../../Global/Images/logo.svg'
 
 const Signup = ({ navigation }) => {
     const H = Dimensions.get('screen').height;
@@ -267,122 +268,128 @@ const Signup = ({ navigation }) => {
     return (
 
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-            <ScrollView
-                contentContainerStyle={{ flexGrow: 1 }}
-                keyboardShouldPersistTaps="handled"
-            >
-                <ImageBackground source={require('../../Global/Images/BackgroundAuth.png')} style={styles.backgroundImg}>
-                    <CustomHeader navigation={navigation} text="Sign Up" />
-                    <TouchableOpacity
-                        style={{
-                            alignItems: 'center',
-                            marginTop: 78
-                        }}
-                        onPress={() => {
-                            setShowImageSourceModal(true);
-                        }}
-                    >
-                        {filePath == '' ? (
-                            <Image source={require('../../Global/Images/userDefault.png')} style={{ height: 150, width: 150, borderRadius: 100 }} />
-                        ) : (
-                            <Image
-                                resizeMode="cover"
-                                borderRadius={1000}
-                                source={{ uri: filePath.uri }}
-                                style={{ height: 150, width: 150, borderRadius: 100 }}
-                            />
-                        )}
-                        <Image source={require('../../Global/Images/camera.png')} style={{ height: 20, width: 20, position: 'absolute', bottom: 12, right: 130 }} />
-                    </TouchableOpacity>
-                </ImageBackground>
+            {/* <ScrollView
+                contentContainerStyle={{ flexGrow: 1, }}
+                keyboardShouldPersistTaps="always" bounces={false}
+            > */}
+            <ImageBackground source={require('../../Global/Images/BackgroundAuth.png')} style={styles.backgroundImg}>
+                <CustomHeader navigation={navigation} text="Sign Up" />
+                <Logo width={300} height={80} style={{ alignSelf: 'center', alignSelf: 'center', marginVertical: 30 }} ></Logo>
 
-                <View style={{
-                    backgroundColor: 'white', width: '90%',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                }}>
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    style={{ flex: 1, }}
+                >
 
-                    <View style={{ marginTop: 20 }}>
-                        <CustomTextBox
-                            imageComponent={<Profile width={24} height={24} />}
-                            value={fullname}
-                            // secureTextEntry={secureTextEntry}
-                            onChangeText={(text) => {
-                                setFullname(text)
+                    <ScrollView keyboardShouldPersistTaps="always" bounces={false}>
+                        <TouchableOpacity
+                            style={{
+                                alignItems: 'center',
+                                marginTop: 38
                             }}
-                            placeholder={'First Name'}
-                            style={{ marginHorizontal: 12 }}
-                        />
-
-                    </View>
-                    <View style={{ marginTop: 12 }}>
-                        <CustomTextBox
-                            imageComponent={<Profile width={24} height={24} />}
-                            value={lastName}
-                            // secureTextEntry={secureTextEntry}
-                            onChangeText={(text) => {
-                                setLastName(text)
+                            onPress={() => {
+                                setShowImageSourceModal(true);
                             }}
-                            placeholder={'Last Name'}
-                            style={{ marginHorizontal: 12 }}
-                        />
-
-                    </View>
-                    <View style={{ marginTop: 12 }}>
-                        <CustomTextBox
-                            imageComponent={<EmailSvg width={24} height={24} />}
-                            //  placeholder='Email address'
-                            value={emailid}
-                            onChangeText={(text) => {
-                                setEmailid(text)
-                            }}
-                            placeholder={'Email Address'}
                         >
-                        </CustomTextBox></View>
-                    <View style={{ marginTop: 12 }}>
-                        <CustomTextBox
-                            imageComponent={<Call width={24} height={24} />}
-                            //  placeholder='Email address'
-                            value={phoneno}
-                            // onChangeText={(text) => {
-                            //     setPhoneno(text)
-                            // }}
-                            onChangeText={handleChange}
-                            keyboardType='number-pad'
-                            placeholder={'Phone'}
-                        >
-                        </CustomTextBox></View>
-                    <View style={{ marginTop: 12 }}>
-                        <CustomTextBox
-                            imageComponent={< Lock
-                                width={24} height={24} />}
-                            placeholder='Password'
-                            value={password}
-                            onChangeText={(text) => {
-                                setPassword(text)
-                            }}
-                            secureTextEntry={true}
-                            style={{ color: 'black', }}
-                            placeholderTextColor='black'
-
-                        >
-                        </CustomTextBox></View>
-                    <TouchableOpacity onPress={() => {
-                        // navigation.navigate('Subscription')
-
-                        signUpUser()
-                    }} style={{ marginTop: 20 }}>
-                        <CustomButtonBlue name="Sign Up"></CustomButtonBlue>
-                    </TouchableOpacity>
-                    <View style={{ alignSelf: 'center', marginTop: 10, flexDirection: 'row' }}>
-                        <Text style={styles.myText}>Already have an account?
-                        </Text>
-                        <TouchableOpacity style={{ marginLeft: 3, marginBottom: 40 }} onPress={() => { navigation.navigate('SignIn') }}>
-                            <Text style={styles.textunderline}>Sign In</Text>
+                            {filePath == '' ? (
+                                <Image source={require('../../Global/Images/userDefault.png')} style={{ height: 150, width: 150, borderRadius: 100 }} />
+                            ) : (
+                                <Image
+                                    resizeMode="cover"
+                                    borderRadius={1000}
+                                    source={{ uri: filePath.uri }}
+                                    style={{ height: 150, width: 150, borderRadius: 100 }}
+                                />
+                            )}
+                            <Image source={require('../../Global/Images/camera.png')} style={{ height: 20, width: 20, position: 'absolute', bottom: 12, right: 130 }} />
                         </TouchableOpacity>
-                    </View>
+                        <View style={{
+                            backgroundColor: 'white', width: '90%',
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                        }}>
 
-                    {/* <View style={{ flexDirection: 'row', marginTop: 16, alignSelf: 'center' }}>
+                            <View style={{ marginTop: 20 }}>
+                                <CustomTextBox
+                                    imageComponent={<Profile width={24} height={24} />}
+                                    value={fullname}
+                                    // secureTextEntry={secureTextEntry}
+                                    onChangeText={(text) => {
+                                        setFullname(text)
+                                    }}
+                                    placeholder={'First Name'}
+                                    style={{ marginHorizontal: 12 }}
+                                />
+
+                            </View>
+                            <View style={{ marginTop: 12 }}>
+                                <CustomTextBox
+                                    imageComponent={<Profile width={24} height={24} />}
+                                    value={lastName}
+                                    // secureTextEntry={secureTextEntry}
+                                    onChangeText={(text) => {
+                                        setLastName(text)
+                                    }}
+                                    placeholder={'Last Name'}
+                                    style={{ marginHorizontal: 12 }}
+                                />
+
+                            </View>
+                            <View style={{ marginTop: 12 }}>
+                                <CustomTextBox
+                                    imageComponent={<EmailSvg width={24} height={24} />}
+                                    //  placeholder='Email address'
+                                    value={emailid}
+                                    onChangeText={(text) => {
+                                        setEmailid(text)
+                                    }}
+                                    placeholder={'Email Address'}
+                                >
+                                </CustomTextBox></View>
+                            <View style={{ marginTop: 12 }}>
+                                <CustomTextBox
+                                    imageComponent={<Call width={24} height={24} />}
+                                    //  placeholder='Email address'
+                                    value={phoneno}
+                                    // onChangeText={(text) => {
+                                    //     setPhoneno(text)
+                                    // }}
+                                    onChangeText={handleChange}
+                                    keyboardType='number-pad'
+                                    placeholder={'Phone'}
+                                >
+                                </CustomTextBox></View>
+                            <View style={{ marginTop: 12 }}>
+                                <CustomTextBox
+                                    imageComponent={< Lock
+                                        width={24} height={24} />}
+                                    placeholder='Password'
+                                    value={password}
+                                    onChangeText={(text) => {
+                                        setPassword(text)
+                                    }}
+                                    secureTextEntry={true}
+                                    style={{ color: 'black', }}
+                                    placeholderTextColor='black'
+
+                                >
+                                </CustomTextBox></View>
+                            <TouchableOpacity onPress={() => {
+                                // navigation.navigate('Subscription')
+
+                                signUpUser()
+                            }} style={{ marginTop: 20 }}>
+                                <CustomButtonBlue name="Sign Up"></CustomButtonBlue>
+                            </TouchableOpacity>
+                            <View style={{ alignSelf: 'center', marginTop: 10, flexDirection: 'row' }}>
+                                <Text style={styles.myText}>Already have an account?
+                                </Text>
+                                <TouchableOpacity style={{ marginLeft: 3, marginBottom: 40 }} onPress={() => { navigation.navigate('SignIn') }}>
+                                    <Text style={styles.textunderline}>Sign In</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            {/* <View style={{ flexDirection: 'row', marginTop: 16, alignSelf: 'center' }}>
                         <View style={styles.line}>
                         </View>
                         <Text style={styles.txt}>OR</Text>
@@ -401,10 +408,15 @@ const Signup = ({ navigation }) => {
                         </View>
 
                     </View> */}
-                </View>
+                        </View>
+                    </ScrollView>
+                </KeyboardAvoidingView>
+            </ImageBackground>
 
-                {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
-            </ScrollView>
+
+
+            {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
+            {/* </ScrollView> */}
 
 
             {loading ? <Loader /> : null}
@@ -501,6 +513,6 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(247, 250, 235, 1)',
         elevation: 10
     },
-    backgroundImg: { height: 333, width: dimensions.SCREEN_WIDTH, }
+    backgroundImg: { height: 553, width: dimensions.SCREEN_WIDTH, flex: 1, }
 });
 export default Signup;

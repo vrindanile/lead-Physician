@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, ActivityIndicator, tyleSheet, Button, TouchableOpacity, StyleSheet, Dimensions, TextInput, ScrollView, SafeAreaView, KeyboardAvoidingView } from 'react-native'
+import { Text, View, Image, ActivityIndicator, tyleSheet, Button, TouchableOpacity, StyleSheet, Dimensions, TextInput, ScrollView, SafeAreaView, KeyboardAvoidingView, ImageBackground } from 'react-native'
 import Toast from 'react-native-toast-message';
 import Loader from '../../Components/Loader';
 import MyText from '../../Components/MyText/MyText';
@@ -88,67 +88,72 @@ const SignIn = ({ navigation }) => {
                 contentContainerStyle={{ flexGrow: 1 }}
 
             >
-                <CustomHeader navigation={navigation} text="Sign In" />
-                <View style={{
-                    backgroundColor: 'white', width: '90%',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                }}>
-                    <Logo width={300} height={100} style={{ alignSelf: 'center', marginVertical: 30 }} ></Logo>
-
-
-                    <View style={{ marginTop: 10 }}>
-                        <CustomTextBox
-                            imageComponent={<EmailSvg width={24} height={24} />}
-                            //  placeholder='Email address'
-                            value={emailid}
-                            onChangeText={(text) => {
-                                setEmailid(text)
-                            }}
-                            placeholder={'Email Address'}
-                        >
-                        </CustomTextBox></View>
-
-                    <View style={{ marginTop: 12 }}>
-                        <CustomTextBox
-                            imageComponent={< Lock
-                                width={24} height={24} />}
-                            placeholder='Password'
-                            value={password}
-                            onChangeText={(text) => {
-                                setPassword(text)
-                            }}
-                            secureTextEntry={true}
-                            style={{ color: 'black', backgroundColor: 'red' }}
-                            placeholderTextColor='black'
-
-                        >
-                        </CustomTextBox></View>
-                    <TouchableOpacity onPress={() => {
-                        console.log('did i reach here');
-                        navigation.navigate('BottomTab')
+                <ImageBackground source={require('../../Global/Images/BackgroundAuth.png')} style={styles.backgroundImg}>
+                    <CustomHeader navigation={navigation} text="Sign In" />
+                    <Logo width={300} height={80} style={{ alignSelf: 'center', marginVertical: 30 }} ></Logo>
+                    <View style={{
+                        backgroundColor: 'white', width: '90%',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        marginTop: 120
                     }}>
-                        <MyText text='Forgot Password?' fontWeight='normal' fontSize={12} textColor={Color.LIGHT_BLACK} fontFamily='Roboto' style={{ fontWeight: '400', textAlign: 'right', marginVertical: 13 }} />
-                    </TouchableOpacity>
+                        {/* <Logo width={300} height={100} style={{ alignSelf: 'center', marginVertical: 30 }} ></Logo> */}
 
-                    <TouchableOpacity onPress={() => {
-                        LoginPressed()
-                    }} style={{ marginTop: 20 }}>
-                        <CustomButtonBlue name="Login"></CustomButtonBlue>
-                    </TouchableOpacity>
-                    <View style={{ alignSelf: 'center', marginTop: '14%', flexDirection: 'row' }}>
-                        <Text style={styles.myText}>Don’t have an account?
-                        </Text>
-                        <TouchableOpacity onPress={() => { navigation.navigate('Signup') }}>
-                            <Text style={[styles.myText, { color: Color.PRIMARY }]}> Signup
-                            </Text>
+
+                        <View style={{ marginTop: 10 }}>
+                            <CustomTextBox
+                                imageComponent={<EmailSvg width={24} height={24} />}
+                                //  placeholder='Email address'
+                                value={emailid}
+                                onChangeText={(text) => {
+                                    setEmailid(text)
+                                }}
+                                placeholder={'Email Address'}
+                            >
+                            </CustomTextBox></View>
+
+                        <View style={{ marginTop: 12 }}>
+                            <CustomTextBox
+                                imageComponent={< Lock
+                                    width={24} height={24} />}
+                                placeholder='Password'
+                                value={password}
+                                onChangeText={(text) => {
+                                    setPassword(text)
+                                }}
+                                secureTextEntry={true}
+                                style={{ color: 'black', backgroundColor: 'red' }}
+                                placeholderTextColor='black'
+
+                            >
+                            </CustomTextBox></View>
+                        <TouchableOpacity onPress={() => {
+                            console.log('did i reach here');
+                            navigation.navigate('BottomTab')
+                        }}>
+                            <MyText text='Forgot Password?' fontWeight='normal' fontSize={12} textColor={Color.LIGHT_BLACK} fontFamily='Roboto' style={{ fontWeight: '400', textAlign: 'right', marginVertical: 13 }} />
                         </TouchableOpacity>
 
+                        <TouchableOpacity onPress={() => {
+                            LoginPressed()
+                        }} style={{ marginTop: 20 }}>
+                            <CustomButtonBlue name="Login"></CustomButtonBlue>
+                        </TouchableOpacity>
+                        <View style={{ alignSelf: 'center', marginTop: '14%', flexDirection: 'row' }}>
+                            <Text style={styles.myText}>Don’t have an account?
+                            </Text>
+                            <TouchableOpacity onPress={() => { navigation.navigate('Signup') }}>
+                                <Text style={[styles.myText, { color: Color.PRIMARY }]}> Signup
+                                </Text>
+                            </TouchableOpacity>
+
+                        </View>
+
+
+
                     </View>
+                </ImageBackground>
 
-
-
-                </View>
 
                 {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
             </ScrollView>
@@ -247,6 +252,7 @@ const styles = StyleSheet.create({
         height: 100,
         marginTop: 30,
         alignSelf: 'center'
-    }
+    },
+    backgroundImg: { height: 550, width: dimensions.SCREEN_WIDTH, alignSelf: 'center' }
 });
 export default SignIn;

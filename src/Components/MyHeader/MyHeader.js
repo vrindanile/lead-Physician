@@ -92,9 +92,7 @@ const MyHeader = ({
         setGreetingMsg(msg);
     };
     const userToken = useSelector(state => state.user.userToken);
-    console.log('my userToken in header-->>', userToken);
     const userInfo = useSelector(state => state.user.userInfo)
-    console.log('my userInfo from header-->>', userInfo);
     // const resetIndexGoToWelcome = CommonActions.reset({
     //     index: 1,
     //     routes: [{ name: ScreenNames.WELCOME }],
@@ -157,7 +155,6 @@ const MyHeader = ({
                 </View>
             ) : <>
                 <View style={{ flexDirection: 'row', width: dimensions.SCREEN_WIDTH * 0.60 }}>
-                    {console.log('userInfo?.profile_image', userInfo?.profile_image)}
                     <Image
                         resizeMode="contain"
                         source={

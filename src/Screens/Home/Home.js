@@ -388,7 +388,7 @@ const Home = ({ navigation }) => {
                                 }}
                             />
                         </View>
-                        <TouchableOpacity style={{ height: 31, width: 59, borderRadius: 5, backgroundColor: Color.LIGHT_BLACK, justifyContent: 'center' }} onPress={() => { navigation.navigate('MyCourse') }}>
+                        <TouchableOpacity style={{ height: 31, width: 59, borderRadius: 5, backgroundColor: Color.LIGHT_BLACK, justifyContent: 'center' }} onPress={() => { navigation.navigate('Schedule') }}>
                             <MyText
                                 text={'See all'}
                                 fontWeight="400"
